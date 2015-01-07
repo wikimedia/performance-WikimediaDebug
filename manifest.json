@@ -1,0 +1,25 @@
+{
+    "manifest_version": 2,
+    "name": "WikimediaDebug",
+    "description": "Injects 'X-Wikimedia-Debug' header to HTTP requests.",
+    "author": "Ori Livneh",
+    "version": "1.0",
+    "icons": {
+        "16": "icon_16.png",
+        "48": "icon_48.png",
+        "128": "icon_128.png"
+    },
+    "default_locale": "en",
+    "browser_action": {
+        "default_icon": "icon_38_off.png"
+    },
+    "background": {
+        "scripts": ["background.js"]
+    },
+    "permissions": [
+        "<all_urls>",
+        "tabs",
+        "webRequest",
+        "webRequestBlocking"
+    ]
+}
