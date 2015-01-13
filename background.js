@@ -17,7 +17,7 @@ var enabled = false;
 
 chrome.browserAction.onClicked.addListener( function () {
     enabled = !enabled;  // toggle.
-    var icon = path: 'icon_38_' + ( enabled ? 'on' : 'off' ) + '.png';
+    var icon = 'icon_38_' + ( enabled ? 'on' : 'off' ) + '.png';
     chrome.browserAction.setIcon( { path: icon } );
 } );
 

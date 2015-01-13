@@ -9,7 +9,6 @@
         "48": "icon_48.png",
         "128": "icon_128.png"
     },
-    "default_locale": "en",
     "browser_action": {
         "default_icon": "icon_38_off.png"
     },
