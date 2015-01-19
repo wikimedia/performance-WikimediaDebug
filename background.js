@@ -22,6 +22,7 @@ var debug = {
 
     // We intercept requests to URLs matching these patterns.
     urlPatterns: [
+        '*://*.mediawiki.org/*',
         '*://*.wikibooks.org/*',
         '*://*.wikimedia.org/*',
         '*://*.wikinews.org/*',
