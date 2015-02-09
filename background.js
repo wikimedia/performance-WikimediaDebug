@@ -42,7 +42,7 @@ var debug = {
         debug.enabled = ( state !== undefined ) ? state : !debug.enabled;
         debug.updateIcon();
         if ( debug.enabled ) {
-            chrome.alarms.create( 'autoOff', { delayInMinutes: 5 } );
+            chrome.alarms.create( 'autoOff', { delayInMinutes: 15 } );
         }
     },
 
@@ -69,6 +69,8 @@ var debug = {
 };
 
 chrome.alarms.onAlarm.addListener( debug.onAlarm );
-chrome.browserAction.onClicked.addListener( debug.toggle );
+chrome.browserAction.onClicked.addListener( function () {
+    debug.toggle();
+} );
 chrome.webRequest.onBeforeSendHeaders.addListener( debug.onBeforeSendHeaders,
     { urls: debug.urlPatterns }, [ 'blocking', 'requestHeaders' ] );
