@@ -7,4 +7,4 @@ toggled via toolbar icon.
 
 You can install it via [the Chrome Web Store](https://chrome.google.com/webstore/detail/wikimediadebug/binmakecefompkjggiklgjenddjoifbb).
 
-There is also a [Firefox version](https://addons.mozilla.org/firefox/addon/wikimedia-debug-header/).
+There is also a [Firefox version](https://github.com/wikimedia/FirefoxWikimediaDebug).
