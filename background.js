@@ -18,7 +18,7 @@
 var debug = {
 
     // The HTTP header we inject.
-    header: { name: 'X-Wikimedia-Debug', value: '1' },
+    header: { name: 'X-Wikimedia-Debug', value: 'mw1017.eqiad.wmnet' },
 
     // We intercept requests to URLs matching these patterns.
     urlPatterns: [
@@ -66,12 +66,25 @@ var debug = {
         if ( alarm.name === 'autoOff' ) {
             debug.toggle( false );
         }
+    },
+
+    onMessage: function ( request, sender, sendResponse ) {
+        if ( request.action === 'set' ) {
+            debug.toggle( request.enabled );
+            debug.header.value = request.value;
+        } else if ( request.action === 'get' ) {
+            sendResponse( {
+                action  : 'state',
+                enabled : debug.enabled,
+                value   : debug.header.value
+            } );
+        }
     }
 };
 
+chrome.runtime.onMessage.addListener( debug.onMessage );
+
 chrome.alarms.onAlarm.addListener( debug.onAlarm );
-chrome.browserAction.onClicked.addListener( function () {
-    debug.toggle();
-} );
+
 chrome.webRequest.onBeforeSendHeaders.addListener( debug.onBeforeSendHeaders,
     { urls: debug.urlPatterns }, [ 'blocking', 'requestHeaders' ] );
