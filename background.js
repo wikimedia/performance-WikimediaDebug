@@ -18,7 +18,25 @@
 var debug = {
 
     // The HTTP header we inject.
-    header: { name: 'X-Wikimedia-Debug', value: 'mw1017.eqiad.wmnet' },
+    getHeader: function () {
+        var attributes = [ 'backend=' + debug.backend ];
+
+        if ( debug.profile ) {
+            attributes.push( 'profile' );
+        }
+        if ( debug.readonly ) {
+            attributes.push( 'readonly' );
+        }
+        if ( debug.log ) {
+            attributes.push( 'log' );
+        }
+
+        return {
+            name  : 'X-Wikimedia-Debug',
+            value : attributes.join( '; ' )
+        };
+    },
+
 
     // We intercept requests to URLs matching these patterns.
     urlPatterns: [
@@ -38,9 +56,21 @@ var debug = {
     // Current state: if true, inject header; if not, do nothing.
     enabled: false,
 
+    // To which backend shall the request go to?
+    backend: 'mw1017.eqiad.wmnet',
+
+    // Should debug requests be profiled?
+    profile: false,
+
+    // Should debug requests be logged to a special bucket?
+    log: false,
+
+    // Should MediaWiki process request in $wgReadOnly-mode?
+    readonly: false,
+
     // Toggle state.
     toggle: function ( state ) {
-        debug.enabled = ( state !== undefined ) ? state : !debug.enabled;
+        debug.enabled = state;
         debug.updateIcon();
         if ( debug.enabled ) {
             chrome.alarms.create( 'autoOff', { delayInMinutes: 15 } );
@@ -56,7 +86,7 @@ var debug = {
     // Inject header when active.
     onBeforeSendHeaders: function ( req ) {
         if ( debug.enabled ) {
-            req.requestHeaders.push( debug.header );
+            req.requestHeaders.push( debug.getHeader() );
         }
         return { requestHeaders: req.requestHeaders };
     },
@@ -71,12 +101,18 @@ var debug = {
     onMessage: function ( request, sender, sendResponse ) {
         if ( request.action === 'set' ) {
             debug.toggle( request.enabled );
-            debug.header.value = request.value;
+            debug.backend = request.backend;
+            debug.log = request.log;
+            debug.profile = request.profile;
+            debug.readonly = request.readonly;
         } else if ( request.action === 'get' ) {
             sendResponse( {
-                action  : 'state',
-                enabled : debug.enabled,
-                value   : debug.header.value
+                action   : 'state',
+                enabled  : debug.enabled,
+                backend  : debug.backend,
+                log      : debug.log,
+                profile  : debug.profile,
+                readonly : debug.readonly,
             } );
         }
     }

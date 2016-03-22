@@ -1,20 +1,33 @@
 window.addEventListener( 'load', function () {
-  var header = document.getElementById( 'header' ),
-      toggle = document.getElementById( 'toggle' );
+  'use strict';
+
+  var $options = [].slice.call( document.querySelectorAll( '.option' ) );
 
   function onUpdate() {
-      chrome.runtime.sendMessage( {
-          action  : 'set',
-          enabled : toggle.checked,
-          value   : header.value
+      var state = { action: 'set' };
+
+      $options.forEach( function ( $el ) {
+          state[ $el.id ] = $el.checked !== undefined
+            ? $el.checked
+            : $el.value;
       } );
+
+      chrome.runtime.sendMessage( state );
   }
 
   chrome.runtime.sendMessage( { action: 'get' }, function ( response ) {
-      header.value = response.value;
-      toggle.checked = response.enabled;
-      toggle.addEventListener( 'change', onUpdate, false );
-      header.addEventListener( 'input', onUpdate, false );
+      $options.forEach( function ( $el ) {
+          var value = response[ $el.id ];
+
+          if ( typeof value === 'boolean' ) {
+              $el.checked = value;
+          } else {
+              $el.value = value;
+          }
+
+          $el.addEventListener( 'change', onUpdate, false );
+      } );
+
       document.body.className = '';
   } );
 } );

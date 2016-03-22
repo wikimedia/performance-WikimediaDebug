@@ -6,8 +6,29 @@
     <link rel=stylesheet href=popup.css />
   </head>
   <body class=hidden>
-    <input type=text id=header placeholder="Header value" />
-    <input type=checkbox id=toggle class="cbx hidden" />
-    <label for=toggle class=lbl></label>
+    <div class=options>
+      <div>
+        <select class=option name=backend id=backend>
+          <option value=mw1017.eqiad.wmnet>mw1017.eqiad.wmnet</option>
+          <option value=mw1099.eqiad.wmnet>mw1099.eqiad.wmnet</option>
+          <option value=mw2017.codfw.wmnet>mw2017.codfw.wmnet</option>
+          <option value=mw2099.codfw.wmnet>mw2099.codfw.wmnet</option>
+        </select>
+      </div>
+      <div>
+        <label><input class=option type=checkbox id=profile>Profile</label>
+        <label><input class=option type=checkbox id=readonly>Read-only</label>
+        <label><input class=option type=checkbox id=log>Log</label>
+      </div>
+    </div>
+    <div class=switch-container>
+      <div class=switch>
+        <input type=checkbox name=switch class="switch-checkbox option" id=enabled>
+        <label class=switch-label for=enabled>
+          <span class=switch-inner></span>
+          <span class=switch-switch></span>
+        </label>
+      </div>
+    </div>
   </body>
 </html>
