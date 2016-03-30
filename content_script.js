@@ -52,7 +52,7 @@
     chrome.runtime.sendMessage( { action: 'get' }, function ( response ) {
         var reqId;
 
-        if ( !response.log && !response.profile ) {
+        if ( !response.enabled || !( response.log || response.profile ) ) {
             return;
         }
 
