@@ -14,6 +14,23 @@
         "default_title": "X-Wikimedia-Debug",
         "default_popup": "popup.html"
     },
+    "content_scripts": [
+        {
+            "matches": [
+                "*://*.mediawiki.org/*",
+                "*://*.wikibooks.org/*",
+                "*://*.wikimedia.org/*",
+                "*://*.wikinews.org/*",
+                "*://*.wikipedia.org/*",
+                "*://*.wikiquote.org/*",
+                "*://*.wikisource.org/*",
+                "*://*.wikiversity.org/*",
+                "*://*.wikivoyage.org/*",
+                "*://*.wiktionary.org/*"
+            ],
+            "js": ["content_script.js"]
+        }
+    ],
     "background": {
         "scripts": ["background.js"]
     },
