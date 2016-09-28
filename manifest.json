@@ -19,6 +19,7 @@
             "matches": [
                 "*://*.mediawiki.org/*",
                 "*://*.wikibooks.org/*",
+                "*://*.wikidata.org/*",
                 "*://*.wikimedia.org/*",
                 "*://*.wikinews.org/*",
                 "*://*.wikipedia.org/*",
@@ -41,6 +42,7 @@
         "webRequestBlocking",
         "*://*.mediawiki.org/*",
         "*://*.wikibooks.org/*",
+        "*://*.wikidata.org/*",
         "*://*.wikimedia.org/*",
         "*://*.wikinews.org/*",
         "*://*.wikipedia.org/*",
