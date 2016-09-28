@@ -70,7 +70,7 @@
         if ( response.log ) {
             addFooterPlace(
                 'Debug Logs',
-                'https://logstash.wikimedia.org/#/dashboard/elasticsearch/request-id?id=' + reqId
+                'https://logstash.wikimedia.org/app/kibana#/dashboard/x-debug?_g=(refreshInterval:(display:Off,pause:!f,value:0),time:(from:now-1h,mode:quick,to:now))&_a=(filters:!((%27$state%27:(store:appState),meta:(alias:!n,disabled:!f,index:%27logstash-*%27,key:_type,negate:!f,value:mediawiki),query:(match:(_type:(query:mediawiki))))),options:(darkTheme:!f),panels:!((col:1,id:Events-Over-Time,panelIndex:14,row:1,size_x:12,size_y:2,type:visualization),(col:1,columns:!(level,channel,host,wiki,message),id:MediaWiki-Events-List,panelIndex:15,row:3,size_x:12,size_y:11,sort:!(%27@timestamp%27,desc),type:search)),query:(query_string:(analyze_wildcard:!t,query:%27reqId:%22' + encodeURI(reqId) + '%22%27)),title:x-debug,uiState:())'
             );
         }
     } );
