@@ -57,7 +57,7 @@ var debug = {
     enabled: false,
 
     // To which backend shall the request go to?
-    backend: 'mw1017.eqiad.wmnet',
+    backend: 'mwdebug1001.eqiad.wmnet',
 
     // Should debug requests be profiled?
     profile: false,
