@@ -3,7 +3,7 @@
     "name": "WikimediaDebug",
     "description": "Injects 'X-Wikimedia-Debug' header to HTTP requests.",
     "author": "Ori Livneh",
-    "version": "1.8.1",
+    "version": "1.8.2",
     "icons": {
         "16": "icon_16.png",
         "48": "icon_48.png",
@@ -51,5 +51,11 @@
         "*://*.wikiversity.org/*",
         "*://*.wikivoyage.org/*",
         "*://*.wiktionary.org/*"
-    ]
+    ],
+    "applications": {
+        "gecko": {
+            "id": "wikimediadebug@wikimedia.org",
+            "strict_min_version": "42.0"
+        }
+    }
 }
