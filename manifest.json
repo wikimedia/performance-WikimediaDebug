@@ -33,7 +33,8 @@
         }
     ],
     "background": {
-        "scripts": ["background.js"]
+        "page": "background.html",
+        "persistent": true
     },
     "permissions": [
         "alarms",
@@ -57,5 +58,9 @@
             "id": "wikimediadebug@wikimedia.org",
             "strict_min_version": "42.0"
         }
+    },
+    "-ms-preload": {
+        "backgroundScript": "backgroundScriptsAPIBridge.js",
+        "contentScript": "contentScriptsAPIBridge.js"
     }
 }
