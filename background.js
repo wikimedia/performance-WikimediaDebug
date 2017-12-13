@@ -51,6 +51,9 @@ var debug = {
         '*://*.wikiversity.org/*',
         '*://*.wikivoyage.org/*',
         '*://*.wiktionary.org/*',
+        '*://*.beta.wmflabs.org/*',
+        '*://*.tools.wmflabs.org/*',
+        '*://*.tools-static.wmflabs.org/*',
     ],
 
     // Current state: if true, inject header; if not, do nothing.
