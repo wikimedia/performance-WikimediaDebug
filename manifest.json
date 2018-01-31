@@ -18,8 +18,8 @@
         {
             "matches": [
                 "*://*.mediawiki.org/*",
-                "*://*.wikibooks.org/*",
                 "*://*.wikidata.org/*",
+                "*://*.wikibooks.org/*",
                 "*://*.wikimedia.org/*",
                 "*://*.wikinews.org/*",
                 "*://*.wikipedia.org/*",
@@ -27,7 +27,10 @@
                 "*://*.wikisource.org/*",
                 "*://*.wikiversity.org/*",
                 "*://*.wikivoyage.org/*",
-                "*://*.wiktionary.org/*"
+                "*://*.wiktionary.org/*",
+                "*://*.beta.wmflabs.org/*",
+                "*://*.tools.wmflabs.org/*",
+                "*://*.tools-static.wmflabs.org/*"
             ],
             "js": ["content_script.js"]
         }
@@ -41,8 +44,8 @@
         "webRequest",
         "webRequestBlocking",
         "*://*.mediawiki.org/*",
-        "*://*.wikibooks.org/*",
         "*://*.wikidata.org/*",
+        "*://*.wikibooks.org/*",
         "*://*.wikimedia.org/*",
         "*://*.wikinews.org/*",
         "*://*.wikipedia.org/*",
@@ -50,7 +53,10 @@
         "*://*.wikisource.org/*",
         "*://*.wikiversity.org/*",
         "*://*.wikivoyage.org/*",
-        "*://*.wiktionary.org/*"
+        "*://*.wiktionary.org/*",
+        "*://*.beta.wmflabs.org/*",
+        "*://*.tools.wmflabs.org/*",
+        "*://*.tools-static.wmflabs.org/*"
     ],
     "applications": {
         "gecko": {
