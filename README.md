@@ -21,14 +21,19 @@ You can install it for [Firefox](https://addons.mozilla.org/en-US/firefox/addon/
   # Warning: Deletes any untracked files!
   git clean -dffx
   ```
-* In the browser's extension manager (e.g. at `chrome://extensions/`),
+* For Chrome:
+  - Open the extension manager at `chrome://extensions/`.
   - Ensure any official installation of WikimediaDebug is disabled. (Temporarily)
   - Ensure "Developer mode" is enabled.
   - Use "Load unpacked" to load this directory as an extension.
-* Verify that the extension works and test that recent changes
-  work as expected.
+  - Test the extension and confirm any change in functionality from a recent commit.
+* For Firefox:
+  - Open the add-on manage at `about:addons` (Tools > Add-ons).
+  - From the gear menu, click "Debug Add-ons".
+  - Use "Load Temporary Add-on..." and navigate to this directory and select the manifest.json file.
+  - Test the extension and confirm any change in functionality from a recent commit.
 
-### Prepare the release
+### Create the release
 
 * After having tested the extension and having a clean working copy
   of `origin/master` (per the above), update the version in `manifest.json` ([example](https://github.com/wikimedia/WikimediaDebug/commit/a2c6cb5b3c89258224bfa906291104e7c5bf77a8))
@@ -41,6 +46,7 @@ You can install it for [Firefox](https://addons.mozilla.org/en-US/firefox/addon/
   git tag -s vX.Y.Z
   git push --follow-tags
   ```
+* Create the release on GitHub with a bullet list of changes. (View  [Tags](https://github.com/wikimedia/WikimediaDebug/tags), then "Create release" for this tag.) 
 * Create a ZIP archive of the extension directory.
 
   ```
@@ -54,3 +60,14 @@ See <https://developer.chrome.com/webstore/publish>.
 * On the [Developer Dashboard](https://chrome.google.com/webstore/developer/dashboard), click "Edit" for WikimediaDebug. (Avoid "Add new item", which creates a new extension instead.)
 * Select "Upload Updated Package", then browse to the ZIP archive, upload it.
 * Then, back on the same Edit page, "Publish changes" at the bottom of the page.
+* Done!
+
+### Upload to Firefox Add-ons
+
+* Log in at <https://addons.mozilla.org/>.
+* Open "[Manage My Submissions](https://addons.mozilla.org/en-US/developers/addons)" from the Tool menu.
+* Select "Wikimedia Debug Header".
+* Click "Upload New Version".
+* Click "Select a file..." and select the ZIP archive, then continue.
+* When asked for release notes, use the same bullet list as used for the release log on GitHub.
+* Done!
