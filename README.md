@@ -40,7 +40,7 @@ You can install it for [Firefox](https://addons.mozilla.org/en-US/firefox/addon/
   and create a commit for this release.
 * Create a signed tag, then push the commit and tag to GitHub.
 
-  ````
+  ```
   git add -p
   git commit -m "Tag vX.Y.Z"
   git tag -s vX.Y.Z
