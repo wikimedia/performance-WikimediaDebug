@@ -51,6 +51,9 @@ var debug = {
         if ( debug.state.profile ) {
             attributes.push( 'profile' );
         }
+        if ( debug.state.forceprofile ) {
+            attributes.push( 'forceprofile' );
+        }
         if ( debug.state.readonly ) {
             attributes.push( 'readonly' );
         }
@@ -91,13 +94,19 @@ var debug = {
         backend: null,
         backends: [],
 
-        // Should debug requests be profiled?
+        // Send call graph to XHGui
+        // https://wikitech.wikimedia.org/wiki/X-Wikimedia-Debug#Request_profiling
         profile: false,
 
-        // Should MediaWiki process request in $wgReadOnly-mode?
+        // Output inline debug profile in the HTML/JS web response
+        // https://wikitech.wikimedia.org/wiki/X-Wikimedia-Debug#Plaintext_request_profile
+        forceprofile: false,
+
+        // Set MediaWiki web request in $wgReadOnly-mode.
         readonly: false,
 
-        // Should debug requests be logged to a special bucket?
+        // Enable verbose debug logging
+        // https://wikitech.wikimedia.org/wiki/X-Wikimedia-Debug#Debug_logging
         log: false
     },
 
@@ -137,6 +146,7 @@ var debug = {
             debug.setEnabled( state.enabled );
             debug.state.backend = state.backend;
             debug.state.profile = state.profile;
+            debug.state.forceprofile = state.forceprofile;
             debug.state.readonly = state.readonly;
             debug.state.log = state.log;
         } else if ( request.action === 'get' ) {

@@ -37,7 +37,8 @@
         a = document.createElement( 'a' );
         a.className = 'noprint';
         a.href = url;
-        a.innerText = caption;
+        a.textContent = caption;
+        a.style.fontWeight = 'bold';
 
         li = document.createElement( 'li' );
         li.id = 'footer-places-' + caption.toLowerCase().replace( /\W/g, '-' );
@@ -65,7 +66,7 @@
 
         if ( response.state.profile && !isBeta ) {
             addFooterPlace(
-                'Profiling Data',
+                'Find in XHGui',
                 'https://performance.wikimedia.org/xhgui/?url=' + reqId
             );
         }
@@ -74,7 +75,7 @@
                 ? 'https://logstash-beta.wmflabs.org/app/kibana#/dashboard/x-debug'
                 : 'https://logstash.wikimedia.org/app/kibana#/dashboard/x-debug';
             addFooterPlace(
-                'Debug Logs',
+                'Find in Logstash',
                 logstashDash
                     + '?_g=(time:(from:now-1h,mode:quick,to:now))&'
                     + '_a=(query:(query_string:(query:%27reqId:%22' + encodeURI(reqId) + '%22%27)))'

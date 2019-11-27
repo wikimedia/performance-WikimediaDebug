@@ -46,7 +46,7 @@ You can install it for [Firefox](https://addons.mozilla.org/en-US/firefox/addon/
   git tag -s vX.Y.Z
   git push --follow-tags
   ```
-* Create the release on GitHub with a bullet list of changes. (View  [Tags](https://github.com/wikimedia/WikimediaDebug/tags), then "Create release" for this tag.) 
+* Create the release on GitHub with a bullet list of changes. (View  [Tags](https://github.com/wikimedia/WikimediaDebug/tags), then "Create release" for this tag.)
 * Create a ZIP archive of the extension directory.
 
   ```
