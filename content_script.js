@@ -50,7 +50,7 @@
     }
 
     chrome.runtime.sendMessage( { action: 'get' }, function ( response ) {
-        var reqId;
+        var reqId, isBeta, logstashDash;
 
         if ( !response.state.enabled || !( response.state.log || response.state.profile ) ) {
             return;
@@ -61,17 +61,23 @@
             return;
         }
 
-        if ( response.state.profile ) {
+        isBeta = /beta\.wmflabs\.org$/.test( location.hostname );
+
+        if ( response.state.profile && !isBeta ) {
             addFooterPlace(
                 'Profiling Data',
                 'https://performance.wikimedia.org/xhgui/?url=' + reqId
             );
         }
         if ( response.state.log ) {
+            logstashDash = isBeta
+                ? 'https://logstash-beta.wmflabs.org/app/kibana#/dashboard/x-debug'
+                : 'https://logstash.wikimedia.org/app/kibana#/dashboard/x-debug';
             addFooterPlace(
                 'Debug Logs',
-                'https://logstash.wikimedia.org/app/kibana#/dashboard/x-debug?_g=(time:(from:now-1h,mode:quick,to:now))&' +
-                    '_a=(query:(query_string:(query:%27reqId:%22' + encodeURI(reqId) + '%22%27)))'
+                logstashDash
+                    + '?_g=(time:(from:now-1h,mode:quick,to:now))&'
+                    + '_a=(query:(query_string:(query:%27reqId:%22' + encodeURI(reqId) + '%22%27)))'
             );
         }
     } );
