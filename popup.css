@@ -10,14 +10,12 @@ body {
 .options {
     float: left;
 }
-.switch-container {
-    float: right;
-}
 #backend {
     display: block;
     width: 100%;
 }
 .switch {
+    float: right;
     position: relative;
     width: 70px;
     margin-bottom: 6px;
