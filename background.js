@@ -16,6 +16,32 @@
  */
 'use strict';
 
+/**
+ * List of backend options to use for the given origin.
+ *
+ * This is asynchronous/Promise-returning in preparation
+ * for <https://github.com/wikimedia/WikimediaDebug/issues/7>.
+ * Once used, this should use chrome.storage.local to cache
+ * the values for e.g. 1 hour.
+ *
+ * @return Promise<Array>
+ */
+function getBackends( realm ) {
+    var list = [
+        'mwdebug1001.eqiad.wmnet',
+        'mwdebug1002.eqiad.wmnet',
+        'mwdebug2001.codfw.wmnet',
+        'mwdebug2002.codfw.wmnet'
+    ];
+    if ( realm === 'beta' ) {
+        // Avoid showing prod hostnames in beta.
+        // Fixes <https://github.com/wikimedia/WikimediaDebug/issues/14>.
+        list = [];
+    }
+
+    return Promise.resolve( list );
+}
+
 var debug = {
 
     // The HTTP header we inject.
@@ -62,7 +88,8 @@ var debug = {
         enabled: false,
 
         // To which backend shall the request go to?
-        backend: 'mwdebug1001.eqiad.wmnet',
+        backend: null,
+        backends: [],
 
         // Should debug requests be profiled?
         profile: false,
@@ -78,7 +105,7 @@ var debug = {
     setEnabled: function ( value ) {
         debug.state.enabled = value;
         debug.updateIcon();
-        if ( debug.enabled ) {
+        if ( debug.state.enabled ) {
             chrome.alarms.create( 'autoOff', { delayInMinutes: 15 } );
         }
     },
@@ -113,11 +140,16 @@ var debug = {
             debug.state.readonly = state.readonly;
             debug.state.log = state.log;
         } else if ( request.action === 'get' ) {
-            sendResponse( {
-                action: 'state',
-                state: debug.state
+            getBackends( request.realm ).then( function ( backends ) {
+                debug.state.backends = backends;
+                sendResponse( {
+                    action: 'state',
+                    state: debug.state
+                } );
             } );
         }
+
+        return true;
     }
 };
 
