@@ -7,12 +7,15 @@ body {
 .hidden {
     display: none;
 }
-.options {
-    float: left;
-}
 #backend {
     display: block;
     width: 100%;
+}
+.options {
+    width: 190px;
+}
+.options label {
+    white-space: nowrap;
 }
 .switch {
     float: right;
