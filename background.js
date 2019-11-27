@@ -1,4 +1,5 @@
 /**
+ * Copyright 2018, 2019 Timo Tijhof <krinklemail@gmail.com>
  * Copyright 2015, 2016 Ori Livneh <ori@wikimedia.org>
  *
  * Licensed under the Apache License, Version 2.0 ( the "License" );
@@ -19,15 +20,15 @@ var debug = {
 
     // The HTTP header we inject.
     getHeader: function () {
-        var attributes = [ 'backend=' + debug.backend ];
+        var attributes = [ 'backend=' + debug.state.backend ];
 
-        if ( debug.profile ) {
+        if ( debug.state.profile ) {
             attributes.push( 'profile' );
         }
-        if ( debug.readonly ) {
+        if ( debug.state.readonly ) {
             attributes.push( 'readonly' );
         }
-        if ( debug.log ) {
+        if ( debug.state.log ) {
             attributes.push( 'log' );
         }
 
@@ -56,24 +57,26 @@ var debug = {
         '*://*.tools-static.wmflabs.org/*',
     ],
 
-    // Current state: if true, inject header; if not, do nothing.
-    enabled: false,
+    state: {
+        // Current state: if true, inject header; if not, do nothing.
+        enabled: false,
 
-    // To which backend shall the request go to?
-    backend: 'mwdebug1001.eqiad.wmnet',
+        // To which backend shall the request go to?
+        backend: 'mwdebug1001.eqiad.wmnet',
 
-    // Should debug requests be profiled?
-    profile: false,
+        // Should debug requests be profiled?
+        profile: false,
 
-    // Should debug requests be logged to a special bucket?
-    log: false,
+        // Should MediaWiki process request in $wgReadOnly-mode?
+        readonly: false,
 
-    // Should MediaWiki process request in $wgReadOnly-mode?
-    readonly: false,
+        // Should debug requests be logged to a special bucket?
+        log: false
+    },
 
-    // Toggle state.
-    toggle: function ( state ) {
-        debug.enabled = state;
+    // Toggle enabled state.
+    setEnabled: function ( value ) {
+        debug.state.enabled = value;
         debug.updateIcon();
         if ( debug.enabled ) {
             chrome.alarms.create( 'autoOff', { delayInMinutes: 15 } );
@@ -82,13 +85,13 @@ var debug = {
 
     // Dim the toolbar icon when inactive.
     updateIcon: function () {
-        var path = debug.enabled ? 'icon_38_on.png' : 'icon_38_off.png';
+        var path = debug.state.enabled ? 'icon_38_on.png' : 'icon_38_off.png';
         chrome.browserAction.setIcon( { path: path } );
     },
 
     // Inject header when active.
     onBeforeSendHeaders: function ( req ) {
-        if ( debug.enabled ) {
+        if ( debug.state.enabled ) {
             req.requestHeaders.push( debug.getHeader() );
         }
         return { requestHeaders: req.requestHeaders };
@@ -97,25 +100,22 @@ var debug = {
     // Automatic shutoff.
     onAlarm: function ( alarm ) {
         if ( alarm.name === 'autoOff' ) {
-            debug.toggle( false );
+            debug.setEnabled( false );
         }
     },
 
     onMessage: function ( request, sender, sendResponse ) {
         if ( request.action === 'set' ) {
-            debug.toggle( request.enabled );
-            debug.backend = request.backend;
-            debug.log = request.log;
-            debug.profile = request.profile;
-            debug.readonly = request.readonly;
+            var state = request.state;
+            debug.setEnabled( state.enabled );
+            debug.state.backend = state.backend;
+            debug.state.profile = state.profile;
+            debug.state.readonly = state.readonly;
+            debug.state.log = state.log;
         } else if ( request.action === 'get' ) {
             sendResponse( {
-                action   : 'state',
-                enabled  : debug.enabled,
-                backend  : debug.backend,
-                log      : debug.log,
-                profile  : debug.profile,
-                readonly : debug.readonly,
+                action: 'state',
+                state: debug.state
             } );
         }
     }

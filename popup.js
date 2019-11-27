@@ -4,22 +4,22 @@ window.addEventListener( 'load', function () {
   var optionElements = [].slice.call( document.querySelectorAll( '.option' ) );
 
   function onUpdate() {
-      var state = { action: 'set' };
+      var message = { action: 'set', state: {} };
 
       optionElements.forEach( function ( el ) {
-          state[ el.id ] = el.checked !== undefined
+          message.state[ el.id ] = el.checked !== undefined
             ? el.checked
             : el.value;
       } );
 
-      chrome.runtime.sendMessage( state );
+      chrome.runtime.sendMessage( message );
   }
 
   chrome.runtime.sendMessage(
     { action: 'get' },
     function ( response ) {
       optionElements.forEach( function ( el ) {
-          var value = response[ el.id ];
+          var value = response.state[ el.id ];
           if ( typeof value === 'boolean' ) {
               el.checked = value;
           } else {
