@@ -30,9 +30,6 @@ var debug = {
         if ( debug.log ) {
             attributes.push( 'log' );
         }
-        if ( debug.php7 ) {
-            attributes.push( 'php7' );
-        }
 
         return {
             name  : 'X-Wikimedia-Debug',
@@ -74,9 +71,6 @@ var debug = {
     // Should MediaWiki process request in $wgReadOnly-mode?
     readonly: false,
 
-    // Should the content be served via php-fpm?
-    php7: false,
-
     // Toggle state.
     toggle: function ( state ) {
         debug.enabled = state;
@@ -85,8 +79,6 @@ var debug = {
             chrome.alarms.create( 'autoOff', { delayInMinutes: 15 } );
         }
     },
-
-
 
     // Dim the toolbar icon when inactive.
     updateIcon: function () {
@@ -116,7 +108,6 @@ var debug = {
             debug.log = request.log;
             debug.profile = request.profile;
             debug.readonly = request.readonly;
-            debug.php7 = request.php7;
         } else if ( request.action === 'get' ) {
             sendResponse( {
                 action   : 'state',
@@ -125,7 +116,6 @@ var debug = {
                 log      : debug.log,
                 profile  : debug.profile,
                 readonly : debug.readonly,
-                php7     : debug.php7
             } );
         }
     }
