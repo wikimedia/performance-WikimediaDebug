@@ -42,8 +42,8 @@ You can install it for [Firefox](https://addons.mozilla.org/en-US/firefox/addon/
 
   ```
   git add -p
-  git commit -m "Tag vX.Y.Z"
-  git tag -s vX.Y.Z
+  git commit -m "Tag X.Y.Z"
+  git tag -s X.Y.Z
   git push --follow-tags
   ```
 * Create the release on GitHub with a bullet list of changes. (View  [Tags](https://github.com/wikimedia/WikimediaDebug/tags), then "Create release" for this tag.)
