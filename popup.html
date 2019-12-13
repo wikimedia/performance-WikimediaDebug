@@ -6,14 +6,8 @@
     <link rel="stylesheet" href="popup.css">
   </head>
   <body class="body-hidden">
-    <div class="switch">
-      <label>
-        <input type="checkbox" class="switch-checkbox option" id="enabled">
-        <span class="switch-label">
-          <span class="switch-inner"></span>
-          <span class="switch-switch"></span>
-        </span>
-      </label>
+    <div class="aside">
+      <div class="ui-switcher option" aria-checked="false" tabindex="0" role="checkbox" id="enabled"><span class="ui-switcher-grip"></span></div>
     </div>
     <div class="column">
       <div>
@@ -22,10 +16,10 @@
         </select>
       </div>
       <div>
-        <label><input class="option" type="checkbox" id="profile">XHGui</label>
-        <label><input class="option" type="checkbox" id="forceprofile">Inline profile</label>
-        <label><input class="option" type="checkbox" id="readonly">Read-only</label>
-        <label><input class="option" type="checkbox" id="log">Log</label>
+        <label class="ui-checkbox"><input class="option" type="checkbox" id="profile"><span></span>XHGui</label>
+        <label class="ui-checkbox"><input class="option" type="checkbox" id="forceprofile"><span></span>Inline profile</label>
+        <label class="ui-checkbox"><input class="option" type="checkbox" id="log"><span></span>Verbose log</label>
+        <label class="ui-checkbox"><input class="optionx" type="checkbox" id="readonly"><span></span>Read-only</label>
       </div>
     </div>
   </body>

@@ -1,17 +1,15 @@
 {
     "manifest_version": 2,
     "name": "WikimediaDebug",
-    "description": "Injects 'X-Wikimedia-Debug' header to HTTP requests.",
+    "description": "Control the X-Wikimedia-Debug header on HTTP requests.",
     "author": "Ori Livneh",
     "version": "2.3.0",
     "icons": {
-        "16": "icon_16.png",
-        "48": "icon_48.png",
-        "128": "icon_128.png"
+        "512": "logo.png"
     },
     "browser_action": {
-        "default_icon": "icon_38_off.png",
-        "default_title": "X-Wikimedia-Debug",
+        "default_icon": "icon-lightmode-128.png",
+        "default_title": "WikimediaDebug",
         "default_popup": "popup.html"
     },
     "content_scripts": [

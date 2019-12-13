@@ -86,6 +86,10 @@ var debug = {
         '*://*.tools-static.wmflabs.org/*',
     ],
 
+    theme: ( window.matchMedia( '(prefers-color-scheme: dark)' ).matches )
+        ? 'dark'
+        : 'light',
+
     state: {
         // Current state: if true, inject header; if not, do nothing.
         enabled: false,
@@ -121,8 +125,14 @@ var debug = {
 
     // Dim the toolbar icon when inactive.
     updateIcon: function () {
-        var path = debug.state.enabled ? 'icon_38_on.png' : 'icon_38_off.png';
+        var path = debug.theme === 'dark' ? 'icon-darkmode-128.png' : 'icon-lightmode-128.png';
         chrome.browserAction.setIcon( { path: path } );
+        if ( debug.state.enabled ) {
+            chrome.browserAction.setBadgeBackgroundColor( { color: '#447ff5' } );
+            chrome.browserAction.setBadgeText( { text: 'ON' } );
+        } else {
+            chrome.browserAction.setBadgeText( { text: '' } );
+        }
     },
 
     // Inject header when active.
@@ -147,7 +157,7 @@ var debug = {
     },
 
     onMessage: function ( request, sender, sendResponse ) {
-        if ( request.action === 'set' ) {
+        if ( request.action === 'set-state' ) {
             var state = request.state;
             debug.setEnabled( state.enabled );
             debug.state.backend = state.backend;
@@ -155,14 +165,18 @@ var debug = {
             debug.state.forceprofile = state.forceprofile;
             debug.state.readonly = state.readonly;
             debug.state.log = state.log;
-        } else if ( request.action === 'get' ) {
+        } else if ( request.action === 'get-state' ) {
             getBackends( request.realm ).then( function ( backends ) {
                 debug.state.backends = backends;
                 sendResponse( {
-                    action: 'state',
                     state: debug.state
                 } );
             } );
+        } else if ( request.action === 'set-theme' ) {
+            if ( debug.theme !== request.theme ) {
+                debug.theme = request.theme === 'dark' ? 'dark' : 'light';
+                debug.updateIcon();
+            }
         }
 
         return true;
@@ -175,3 +189,5 @@ chrome.alarms.onAlarm.addListener( debug.onAlarm );
 
 chrome.webRequest.onBeforeSendHeaders.addListener( debug.onBeforeSendHeaders,
     { urls: debug.urlPatterns }, [ 'blocking', 'requestHeaders' ] );
+
+debug.updateIcon();

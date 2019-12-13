@@ -50,7 +50,7 @@
         }
     }
 
-    chrome.runtime.sendMessage( { action: 'get' }, function ( response ) {
+    chrome.runtime.sendMessage( { action: 'get-state' }, function ( response ) {
         var reqId, isBeta, logstashDash;
 
         if ( !response.state.enabled || !( response.state.log || response.state.profile ) ) {
