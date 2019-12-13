@@ -136,6 +136,12 @@ var debug = {
     // Automatic shutoff.
     onAlarm: function ( alarm ) {
         if ( alarm.name === 'autoOff' ) {
+            // Disable and reset logging/profiling
+            debug.state.profile = false;
+            debug.state.forceprofile = false;
+            debug.state.readonly = false;
+            debug.state.log = false;
+
             debug.setEnabled( false );
         }
     },
