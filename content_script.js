@@ -64,10 +64,12 @@
 
         isBeta = /beta\.wmflabs\.org$/.test( location.hostname );
 
-        if ( response.state.profile && !isBeta ) {
+        if ( response.state.profile ) {
             addFooterPlace(
                 'Find in XHGui',
-                'https://performance.wikimedia.org/xhgui/?url=' + reqId
+                isBeta
+                    ? 'https://performance-beta.wmflabs.org/xhgui/?url=' + reqId
+                    : 'https://performance.wikimedia.org/xhgui/?url=' + reqId
             );
         }
         if ( response.state.log ) {
