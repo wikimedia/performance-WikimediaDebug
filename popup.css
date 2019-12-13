@@ -7,16 +7,31 @@ body {
 .hidden {
     display: none;
 }
+.column {
+    width: 190px;
+}
+
+/**
+ * Backend host selector
+ */
+
 #backend {
     display: block;
     width: 100%;
 }
-.options {
-    width: 190px;
-}
-.options label {
+
+/**
+ * Checkbox options
+ */
+
+.column label {
     white-space: nowrap;
 }
+
+/**
+ * Main switcher
+ */
+
 .switch {
     float: right;
     position: relative;

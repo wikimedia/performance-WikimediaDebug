@@ -1,31 +1,31 @@
 <!DOCTYPE html>
-<html lang=en>
+<html lang="en">
   <head>
     <title>X-Wikimedia-Debug popup</title>
-    <script src=popup.js></script>
-    <link rel=stylesheet href=popup.css />
+    <script src="popup.js"></script>
+    <link rel="stylesheet" href="popup.css">
   </head>
-  <body class=hidden>
-    <div class=switch>
+  <body class="body-hidden">
+    <div class="switch">
       <label>
-        <input type=checkbox class="switch-checkbox option" id=enabled>
-        <span class=switch-label>
-          <span class=switch-inner></span>
-          <span class=switch-switch></span>
+        <input type="checkbox" class="switch-checkbox option" id="enabled">
+        <span class="switch-label">
+          <span class="switch-inner"></span>
+          <span class="switch-switch"></span>
         </span>
       </label>
     </div>
-    <div class=options>
+    <div class="column">
       <div>
-        <select class=option id=backend>
+        <select class="option" id="backend">
           <option value="1" selected>(Backends unknown)</option>
         </select>
       </div>
       <div>
-        <label><input class=option type=checkbox id=profile>XHGui</label>
-        <label><input class=option type=checkbox id=forceprofile>Inline profile</label>
-        <label><input class=option type=checkbox id=readonly>Read-only</label>
-        <label><input class=option type=checkbox id=log>Log</label>
+        <label><input class="option" type="checkbox" id="profile">XHGui</label>
+        <label><input class="option" type="checkbox" id="forceprofile">Inline profile</label>
+        <label><input class="option" type="checkbox" id="readonly">Read-only</label>
+        <label><input class="option" type="checkbox" id="log">Log</label>
       </div>
     </div>
   </body>
