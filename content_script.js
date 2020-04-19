@@ -68,7 +68,7 @@
             addFooterPlace(
                 'Find in XHGui',
                 isBeta
-                    ? 'https://performance-beta.wmflabs.org/xhgui/?url=' + reqId
+                    ? 'https://performance.wikimedia.beta.wmflabs.org/xhgui/?url=' + reqId
                     : 'https://performance.wikimedia.org/xhgui/?url=' + reqId
             );
         }
