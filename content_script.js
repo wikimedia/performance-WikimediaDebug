@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/* eslint-env browser */
+/* global chrome */
 ( function () {
     'use strict';
 
@@ -20,49 +22,45 @@
     // from the script source because Chrome extension content scripts do not share
     // an execution environment with other JavaScript code.
     function getRequestId() {
-        var nodes = document.querySelectorAll( 'script' ), i, match;
+        const nodes = document.querySelectorAll( 'script' );
 
-        for ( i = 0; i < nodes.length; i++ ) {
-            match = /"wgRequestId":\s*"([^"]+)"/.exec( nodes[i].innerText );
+        for ( let i = 0; i < nodes.length; i++ ) {
+            const match = /"wgRequestId":\s*"([^"]+)"/.exec( nodes[ i ].innerText );
             if ( match ) {
-                return match[1];
+                return match[ 1 ];
             }
         }
     }
 
     // Insert an item to the footer menu at the bottom of the page.
     function addFooterPlace( caption, url ) {
-        var a, li, ul;
-
-        a = document.createElement( 'a' );
+        const a = document.createElement( 'a' );
         a.className = 'noprint';
         a.href = url;
         a.textContent = caption;
         a.style.fontWeight = 'bold';
 
-        li = document.createElement( 'li' );
+        const li = document.createElement( 'li' );
         li.id = 'footer-places-' + caption.toLowerCase().replace( /\W/g, '-' );
         li.appendChild( a );
 
-        ul = document.querySelector( '#footer-places, .footer-places' );
+        const ul = document.querySelector( '#footer-places, .footer-places' );
         if ( ul ) {
             ul.appendChild( li );
         }
     }
 
     chrome.runtime.sendMessage( { action: 'get-state' }, function ( response ) {
-        var reqId, isBeta, logstashDash;
-
         if ( !response.state.enabled || !( response.state.log || response.state.profile ) ) {
             return;
         }
 
-        reqId = getRequestId();
+        const reqId = getRequestId();
         if ( !reqId ) {
             return;
         }
 
-        isBeta = /beta\.wmflabs\.org$/.test( location.hostname );
+        const isBeta = /beta\.wmflabs\.org$/.test( location.hostname );
 
         if ( response.state.profile ) {
             addFooterPlace(
@@ -73,16 +71,16 @@
             );
         }
         if ( response.state.log ) {
-            logstashDash = isBeta
+            const logstashDash = isBeta
                 ? 'https://logstash-beta.wmflabs.org/app/kibana#/dashboard/x-debug'
                 : 'https://logstash.wikimedia.org/app/kibana#/dashboard/x-debug';
             addFooterPlace(
                 'Find in Logstash',
                 logstashDash
                     + '?_g=(time:(from:now-1h,mode:quick,to:now))&'
-                    + '_a=(query:(query_string:(query:%27reqId:%22' + encodeURI(reqId) + '%22%27)))'
+                    + '_a=(query:(query_string:(query:%27reqId:%22' + encodeURI( reqId ) + '%22%27)))'
             );
         }
     } );
 
-} () );
+}() );

@@ -1,0 +1,9 @@
+{
+  "private": true,
+  "scripts": {
+    "test": "eslint ."
+  },
+  "devDependencies": {
+    "eslint-config-wikimedia": "*"
+  }
+}

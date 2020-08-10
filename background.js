@@ -15,6 +15,7 @@
  * limitations under the License.
  */
 'use strict';
+/* global chrome, window */
 
 /**
  * List of backend options to use for the given origin.
@@ -24,10 +25,11 @@
  * Once used, this should use chrome.storage.local to cache
  * the values for e.g. 1 hour.
  *
- * @return Promise<Array>
+ * @param {string} realm
+ * @return {Promise<Array>}
  */
 function getBackends( realm ) {
-    var list = [
+    let list = [
         'mwdebug1001.eqiad.wmnet',
         'mwdebug1002.eqiad.wmnet',
         'mwdebug2001.codfw.wmnet',
@@ -42,11 +44,11 @@ function getBackends( realm ) {
     return Promise.resolve( list );
 }
 
-var debug = {
+const debug = {
 
     // The HTTP header we inject.
     getHeader: function () {
-        var attributes = [ 'backend=' + debug.state.backend ];
+        const attributes = [ 'backend=' + debug.state.backend ];
 
         if ( debug.state.profile ) {
             attributes.push( 'profile' );
@@ -62,11 +64,10 @@ var debug = {
         }
 
         return {
-            name  : 'X-Wikimedia-Debug',
-            value : attributes.join( '; ' )
+            name: 'X-Wikimedia-Debug',
+            value: attributes.join( '; ' )
         };
     },
-
 
     // We intercept requests to URLs matching these patterns.
     urlPatterns: [
@@ -83,7 +84,7 @@ var debug = {
         '*://*.wiktionary.org/*',
         '*://*.beta.wmflabs.org/*',
         '*://*.tools.wmflabs.org/*',
-        '*://*.tools-static.wmflabs.org/*',
+        '*://*.tools-static.wmflabs.org/*'
     ],
 
     theme: ( window.matchMedia( '(prefers-color-scheme: dark)' ).matches )
@@ -125,7 +126,7 @@ var debug = {
 
     // Dim the toolbar icon when inactive.
     updateIcon: function () {
-        var path = debug.theme === 'dark' ? 'icon-darkmode-128.png' : 'icon-lightmode-128.png';
+        const path = debug.theme === 'dark' ? 'icon-darkmode-128.png' : 'icon-lightmode-128.png';
         chrome.browserAction.setIcon( { path: path } );
         if ( debug.state.enabled ) {
             chrome.browserAction.setBadgeBackgroundColor( { color: '#447ff5' } );
@@ -158,7 +159,7 @@ var debug = {
 
     onMessage: function ( request, sender, sendResponse ) {
         if ( request.action === 'set-state' ) {
-            var state = request.state;
+            const state = request.state;
             debug.setEnabled( state.enabled );
             debug.state.backend = state.backend;
             debug.state.profile = state.profile;

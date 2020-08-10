@@ -1,0 +1,12 @@
+{
+	"root": true,
+	"extends": [
+		"wikimedia/common",
+		"wikimedia/language/es2018"
+	],
+	"rules": {
+		"no-implicit-globals": "off",
+		"indent": [ "error", 4 ],
+		"operator-linebreak": [ "error", "before" ]
+	}
+}
