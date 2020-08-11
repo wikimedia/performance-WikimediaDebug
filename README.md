@@ -36,17 +36,23 @@ You can install [WikimediaDebug for Firefox](https://addons.mozilla.org/en-US/fi
 ### Create the release
 
 * After having tested the extension and having a clean working copy
-  of `origin/master` (per the above), update the version in `manifest.json` ([example](https://github.com/wikimedia/WikimediaDebug/commit/a2c6cb5b3c89258224bfa906291104e7c5bf77a8))
+  of `origin/master` (per the above), update the version in `manifest.json` ([example](https://gerrit.wikimedia.org/g/performance/WikimediaDebug/+/a2c6cb5b3c89258224bfa906291104e7c5bf77a8))
   and create a commit for this release.
-* Create a signed tag, then push the commit and tag to GitHub.
+* Add a bullet list of noteworthy changes to `CHANGELOG.md`.
+* Push the commit for review and merge it, then pull it down, then create a signed tag and push it.
 
   ```
+  git remote update && git reset origin/master
+  # edit manifest.json
+  # edit CHANGELOG.md
   git add -p
   git commit -m "Tag X.Y.Z"
+  git review
+  # merge the commit
+  git pull
   git tag -s X.Y.Z
-  git push --follow-tags
+  git push --tags
   ```
-* Create the release on GitHub with a bullet list of changes. (View  [Tags](https://github.com/wikimedia/WikimediaDebug/tags), then "Create release" for this tag.)
 * Create a ZIP archive of the extension directory.
 
   ```
@@ -69,5 +75,5 @@ See <https://developer.chrome.com/webstore/publish>.
 * Select "Wikimedia Debug Header".
 * Click "Upload New Version".
 * Click "Select a file..." and select the ZIP archive, then continue.
-* When asked for release notes, use the same bullet list as used for the release log on GitHub.
+* When asked for release notes, use the same bullet list as used for [CHANGELOG.md](./CHANGELOG.md).
 * Done!
