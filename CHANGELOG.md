@@ -1,3 +1,9 @@
+## 2.4.1
+
+### Fixed
+
+* Update XHGui address in Beta Cluster. Moved from `performance-beta.wmflabs.org` to <https://performance.wikimedia.beta.wmflabs.org>. (Timo Tijhof)
+
 ## 2.4
 
 See also [WikimediaDebug v2 blog post](https://phabricator.wikimedia.org/phame/post/view/183/wikimediadebug_v2_is_here/).

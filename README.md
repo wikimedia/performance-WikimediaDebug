@@ -16,8 +16,7 @@ You can install [WikimediaDebug for Firefox](https://addons.mozilla.org/en-US/fi
 * Checkout latest `origin/master` and ensure a clean working copy.
 
   ```
-  git remote update
-  git checkout origin/master
+  git remote update && git checkout -B release -t origin/master
   # Warning: Deletes any untracked files!
   git clean -dffx
   ```
