@@ -32,6 +32,7 @@ function getBackends( realm ) {
     let list = [
         'mwdebug1001.eqiad.wmnet',
         'mwdebug1002.eqiad.wmnet',
+        'mwdebug1003.eqiad.wmnet',
         'mwdebug2001.codfw.wmnet',
         'mwdebug2002.codfw.wmnet'
     ];
