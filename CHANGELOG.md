@@ -1,3 +1,9 @@
+## 2.4.2
+
+### Fixed
+
+* Added mwdebug1003 to the list of servers (Effie Mouzeli)
+
 ## 2.4.1
 
 ### Fixed
