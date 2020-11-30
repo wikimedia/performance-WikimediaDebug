@@ -15,34 +15,24 @@
  * limitations under the License.
  */
 'use strict';
-/* global chrome, window */
+/* global chrome */
 
 /**
  * List of backend options to use for the given origin.
- *
- * This is asynchronous/Promise-returning in preparation
- * for <https://github.com/wikimedia/WikimediaDebug/issues/7>.
- * Once used, this should use chrome.storage.local to cache
- * the values for e.g. 1 hour.
  *
  * @param {string} realm
  * @return {Promise<Array>}
  */
 function getBackends( realm ) {
-    let list = [
-        'mwdebug1001.eqiad.wmnet',
-        'mwdebug1002.eqiad.wmnet',
-        'mwdebug1003.eqiad.wmnet',
-        'mwdebug2001.codfw.wmnet',
-        'mwdebug2002.codfw.wmnet'
-    ];
     if ( realm === 'beta' ) {
         // Avoid showing prod hostnames in beta.
         // Fixes <https://github.com/wikimedia/WikimediaDebug/issues/14>.
-        list = [];
+        return Promise.resolve( [] );
     }
 
-    return Promise.resolve( list );
+    return fetch( 'https://noc.wikimedia.org/conf/debug.json' )
+        .then( ( r ) => r.json() )
+        .then( ( d ) => d.backends );
 }
 
 const debug = {

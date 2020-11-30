@@ -1,4 +1,3 @@
-/* eslint-env browser */
 /* global chrome */
 
 function getCurrentTab() {

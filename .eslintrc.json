@@ -8,5 +8,8 @@
 		"no-implicit-globals": "off",
 		"indent": [ "error", 4 ],
 		"operator-linebreak": [ "error", "before" ]
+	},
+	"env": {
+		"browser": true
 	}
 }
