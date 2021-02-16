@@ -1,3 +1,9 @@
+## 2.4.3
+
+### Fixed
+
+* List of debug servers is now fetched from noc.wikimedia.org (Gilles Dubuc)
+
 ## 2.4.2
 
 ### Fixed
