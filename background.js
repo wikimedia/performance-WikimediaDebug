@@ -23,17 +23,18 @@
  * @param {string} realm
  * @return {Promise<Array>}
  */
-function getBackends( realm ) {
+async function getBackends( realm ) {
     if ( realm === 'beta' ) {
         // Avoid showing prod hostnames in beta.
         // Fixes <https://github.com/wikimedia/WikimediaDebug/issues/14>.
         return Promise.resolve( [] );
     }
 
-    return fetch( 'https://noc.wikimedia.org/conf/debug.json' )
-        .then( ( r ) => r.json() )
-        .then( ( d ) => d.backends );
+    const r = await fetch('https://noc.wikimedia.org/conf/debug.json');
+    const d = await r.json();
+    return d.backends;
 }
+
 
 const debug = {
 
