@@ -17,20 +17,6 @@
 ( function () {
     'use strict';
 
-    // Equivalent to `mw.config.get( 'wgRequestId' )`. We have to scrape the value
-    // from the script source because Chrome extension content scripts do not share
-    // an execution environment with other JavaScript code.
-    function getRequestId() {
-        const nodes = document.querySelectorAll( 'script' );
-
-        for ( let i = 0; i < nodes.length; i++ ) {
-            const match = /"wgRequestId":\s*"([^"]+)"/.exec( nodes[ i ].innerText );
-            if ( match ) {
-                return match[ 1 ];
-            }
-        }
-    }
-
     // Insert an item to the footer menu at the bottom of the page.
     function addFooterPlace( caption, url ) {
         const a = document.createElement( 'a' );
@@ -50,15 +36,15 @@
     }
 
     chrome.runtime.sendMessage( { action: 'content-script' }, function ( response ) {
-        if ( !response.state.enabled || !( response.state.log || response.state.profile ) ) {
+        if ( !response.state.enabled
+                || !( response.state.log || response.state.profile )
+                || !response.tabData
+                || !response.tabData.reqId
+        ) {
             return;
         }
 
-        const reqId = getRequestId();
-        if ( !reqId ) {
-            return;
-        }
-
+        const reqId = response.tabData.reqId;
         const isBeta = /beta\.wmflabs\.org$/.test( location.hostname );
 
         if ( response.state.profile ) {

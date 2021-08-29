@@ -17,6 +17,9 @@
 'use strict';
 /* global chrome */
 
+// From a chrome.tab.id to some data we maintain
+const tabDatas = {};
+
 /**
  * List of backend options to use for the given origin.
  *
@@ -134,6 +137,23 @@ const debug = {
         return { requestHeaders: req.requestHeaders };
     },
 
+    onHeadersReceived: function ( resp ) {
+        if ( resp.type === 'main_frame' && debug.state.enabled ) {
+            const header = resp.responseHeaders.find( ( header ) => header.name === 'x-request-id' );
+            tabDatas[ resp.tabId ] = {
+                reqId: header && header.value
+            };
+        }
+    },
+
+    // https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/tabs/onRemoved
+    onTabRemoved: function ( tabId ) {
+        // The tabId may be unknown, for example:
+        // ... when WikimediaDebug is not enabled at all.
+        // ... when closing a tab that was already open before WikimediaDebug got enabled.
+        delete tabDatas[ tabId ];
+    },
+
     // Automatic shutoff.
     onAlarm: function ( alarm ) {
         if ( alarm.name === 'autoOff' ) {
@@ -149,10 +169,10 @@ const debug = {
 
     /**
      * @see https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/runtime/onMessage
-     * @param request
-     * @param sender https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/runtime/MessageSender
+     * @param {Object} request
+     * @param {Object} sender https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/runtime/MessageSender
      * @param {Function} sendResponse
-     * @return {bool|undefined} Return true to make sendResponse available asynchronously,
+     * @return {boolean|undefined} Return true to make sendResponse available asynchronously,
      *  or undefined if there is only a synchronous response or no response needed.
      */
     onMessage: function ( request, sender, sendResponse ) {
@@ -183,7 +203,8 @@ const debug = {
         // Optimisation: Ignore content-script.js when we're disabled.
         if ( request.action === 'content-script' && debug.state.enabled ) {
             sendResponse( {
-                state: debug.state
+                state: debug.state,
+                tabData: ( tabDatas[ sender.tab && sender.tab.id ] || null )
             } );
             return;
         }
@@ -204,5 +225,10 @@ chrome.alarms.onAlarm.addListener( debug.onAlarm );
 
 chrome.webRequest.onBeforeSendHeaders.addListener( debug.onBeforeSendHeaders,
     { urls: debug.urlPatterns }, [ 'blocking', 'requestHeaders' ] );
+
+chrome.webRequest.onHeadersReceived.addListener( debug.onHeadersReceived,
+    { urls: debug.urlPatterns }, [ 'responseHeaders' ] );
+
+chrome.tabs.onRemoved.addListener( debug.onTabRemoved );
 
 debug.updateIcon();
