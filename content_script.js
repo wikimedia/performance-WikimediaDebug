@@ -49,7 +49,7 @@
         }
     }
 
-    chrome.runtime.sendMessage( { action: 'get-state' }, function ( response ) {
+    chrome.runtime.sendMessage( { action: 'content-script' }, function ( response ) {
         if ( !response.state.enabled || !( response.state.log || response.state.profile ) ) {
             return;
         }

@@ -23,7 +23,7 @@
  * @param {string} realm
  * @return {Promise<Array>}
  */
-function getBackends( realm ) {
+function fetchBackends( realm ) {
     if ( realm === 'beta' ) {
         // Avoid showing prod hostnames in beta.
         // Fixes <https://github.com/wikimedia/WikimediaDebug/issues/14>.
@@ -88,7 +88,6 @@ const debug = {
 
         // To which backend shall the request go to?
         backend: null,
-        backends: [],
 
         // Send call graph to XHGui
         // https://wikitech.wikimedia.org/wiki/X-Wikimedia-Debug#Request_profiling
@@ -148,6 +147,14 @@ const debug = {
         }
     },
 
+    /**
+     * @see https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/runtime/onMessage
+     * @param request
+     * @param sender https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/runtime/MessageSender
+     * @param {Function} sendResponse
+     * @return {bool|undefined} Return true to make sendResponse available asynchronously,
+     *  or undefined if there is only a synchronous response or no response needed.
+     */
     onMessage: function ( request, sender, sendResponse ) {
         if ( request.action === 'set-state' ) {
             const state = request.state;
@@ -157,21 +164,37 @@ const debug = {
             debug.state.forceprofile = state.forceprofile;
             debug.state.readonly = state.readonly;
             debug.state.log = state.log;
-        } else if ( request.action === 'get-state' ) {
-            getBackends( request.realm ).then( function ( backends ) {
-                debug.state.backends = backends;
+            return;
+        }
+
+        if ( request.action === 'get-state' ) {
+            fetchBackends().then( ( backends ) => {
                 sendResponse( {
+                    backends: backends,
                     state: debug.state
                 } );
             } );
-        } else if ( request.action === 'set-theme' ) {
+            return true;
+        }
+
+        // Optimisation: Only fetch backends when user opens popup, not on every page load,
+        // that's why content-script has its own action.
+        //
+        // Optimisation: Ignore content-script.js when we're disabled.
+        if ( request.action === 'content-script' && debug.state.enabled ) {
+            sendResponse( {
+                state: debug.state
+            } );
+            return;
+        }
+
+        if ( request.action === 'set-theme' ) {
             if ( debug.theme !== request.theme ) {
                 debug.theme = request.theme === 'dark' ? 'dark' : 'light';
                 debug.updateIcon();
             }
+            return;
         }
-
-        return true;
     }
 };
 

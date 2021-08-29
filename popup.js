@@ -53,10 +53,10 @@ window.addEventListener( 'load', async function () {
     chrome.runtime.sendMessage(
         { action: 'get-state', realm: currentRealm },
         function ( response ) {
-            if ( response.state.backends.length ) {
+            if ( response.backends ) {
                 const backendElement = document.querySelector( '#backend' );
                 backendElement.innerHTML = '';
-                response.state.backends.forEach( function ( backend ) {
+                response.backends.forEach( function ( backend ) {
                     const item = document.createElement( 'option' );
                     item.value = item.textContent = backend;
                     backendElement.appendChild( item );
