@@ -1,14 +1,24 @@
+## 2.4.4
+
+### Fixed
+
+* popup: Fix "character encoding" warning from Firefox devtools. (Timo Tijhof)
+* background: Only fetch from noc.wikimedia.org when opening the popup.
+  Previously the list was also fetched on every page load on a WMF domain
+  in any tab, and when WikimediaDebug is off. (Timo Tijhof)
+* Use x-request-id header for perf/logging link, instead of `mw.config` wgRequestId. ([T279211](https://phabricator.wikimedia.org/T279211)) (Timo Tijhof)
+
 ## 2.4.3
 
 ### Fixed
 
-* List of debug servers is now fetched from noc.wikimedia.org (Gilles Dubuc)
+* List of debug servers is now fetched from noc.wikimedia.org. (Gilles Dubuc)
 
 ## 2.4.2
 
 ### Fixed
 
-* Added mwdebug1003 to the list of servers (Effie Mouzeli)
+* Added mwdebug1003 to the list of servers. (Effie Mouzeli)
 
 ## 2.4.1
 
