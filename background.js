@@ -197,8 +197,9 @@ const debug = {
             return true;
         }
 
-        // Optimisation: Only fetch backends when user opens popup, not on every page load,
-        // that's why content-script has its own action.
+        // Optimisation: Only fetch backends when someone opens the popup, not on every page
+        // load. That's why content-script has its own action, separate from the 'get-state'
+        // action for the popup.
         //
         // Optimisation: Ignore content-script.js when we're disabled.
         if ( request.action === 'content-script' && debug.state.enabled ) {
