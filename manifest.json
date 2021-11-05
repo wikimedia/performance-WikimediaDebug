@@ -59,7 +59,7 @@
     "applications": {
         "gecko": {
             "id": "wikimediadebug@wikimedia.org",
-            "strict_min_version": "57.0"
+            "strict_min_version": "79.0"
         }
     }
 }

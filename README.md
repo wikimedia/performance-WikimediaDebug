@@ -63,8 +63,8 @@ You can install [WikimediaDebug for Firefox](https://addons.mozilla.org/en-US/fi
 See <https://developer.chrome.com/webstore/publish>.
 
 * On the [Developer Dashboard](https://chrome.google.com/webstore/developer/dashboard), click "Edit" for WikimediaDebug. (Avoid "Add new item", which creates a new extension instead.)
-* Select "Upload Updated Package", then browse to the ZIP archive, upload it.
-* Then, back on the same Edit page, "Publish changes" at the bottom of the page.
+* Click "Package / Upload new package", then select your local ZIP archive.
+* Once back on the Edit page, click "Submit for review" at the top.
 * Done!
 
 ### Upload to Firefox Add-ons
