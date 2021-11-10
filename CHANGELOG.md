@@ -1,3 +1,9 @@
+## 2.4.5
+
+### Fixed
+
+* popup: Avoid "TypeError" in developer console when using Chrome. ([T294335](https://phabricator.wikimedia.org/T294335)) (Timo Tijhof)
+
 ## 2.4.4
 
 ### Fixed
