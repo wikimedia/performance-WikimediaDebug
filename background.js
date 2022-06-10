@@ -188,7 +188,7 @@ const debug = {
         }
 
         if ( request.action === 'get-state' ) {
-            fetchBackends().then( ( backends ) => {
+            fetchBackends( request.realm ).then( ( backends ) => {
                 sendResponse( {
                     backends: backends,
                     state: debug.state
