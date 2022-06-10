@@ -5,6 +5,6 @@
     "fix": "eslint --fix ."
   },
   "devDependencies": {
-    "eslint-config-wikimedia": "*"
+    "eslint-config-wikimedia": "0.16.2"
   }
 }
