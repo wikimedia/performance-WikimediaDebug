@@ -58,8 +58,8 @@
         }
         if ( response.state.log ) {
             const logstashDash = isBeta
-                ? 'https://logstash-beta.wmflabs.org/app/kibana#/dashboard/x-debug'
-                : 'https://logstash.wikimedia.org/app/kibana#/dashboard/x-debug';
+                ? 'https://logstash-beta.wmflabs.org/app/dashboards#/view/x-debug'
+                : 'https://logstash.wikimedia.org/app/dashboards#/view/x-debug';
             addFooterPlace(
                 'Find in Logstash',
                 logstashDash
