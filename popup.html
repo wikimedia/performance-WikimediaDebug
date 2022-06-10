@@ -7,21 +7,26 @@
     <link rel="stylesheet" href="popup.css">
   </head>
   <body class="body-hidden">
-    <div class="aside">
-      <div class="ui-switcher option" aria-checked="false" tabindex="0" role="checkbox" id="enabled"><span class="ui-switcher-grip"></span></div>
+    <div class="main-popup">
+      <div class="aside">
+        <div class="ui-switcher option" aria-checked="false" tabindex="0" role="checkbox" id="enabled"><span class="ui-switcher-grip"></span></div>
+      </div>
+      <div class="column">
+        <div>
+          <select class="option" id="backend">
+            <option value="1" selected>(Backends unknown)</option>
+          </select>
+        </div>
+        <div>
+          <label class="ui-checkbox"><input class="option" type="checkbox" id="profile"><span></span>XHGui</label>
+          <label class="ui-checkbox"><input class="option" type="checkbox" id="forceprofile"><span></span>Inline profile</label>
+          <label class="ui-checkbox"><input class="option" type="checkbox" id="log"><span></span>Verbose log</label>
+          <label class="ui-checkbox"><input class="optionx" type="checkbox" id="readonly"><span></span>Read-only</label>
+        </div>
+      </div>
     </div>
-    <div class="column">
-      <div>
-        <select class="option" id="backend">
-          <option value="1" selected>(Backends unknown)</option>
-        </select>
-      </div>
-      <div>
-        <label class="ui-checkbox"><input class="option" type="checkbox" id="profile"><span></span>XHGui</label>
-        <label class="ui-checkbox"><input class="option" type="checkbox" id="forceprofile"><span></span>Inline profile</label>
-        <label class="ui-checkbox"><input class="option" type="checkbox" id="log"><span></span>Verbose log</label>
-        <label class="ui-checkbox"><input class="optionx" type="checkbox" id="readonly"><span></span>Read-only</label>
-      </div>
+    <div class="warning" hidden>
+      <p>Unsupported domain.</p>
     </div>
   </body>
 </html>

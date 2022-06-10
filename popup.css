@@ -11,6 +11,12 @@ body {
 .body-hidden {
     display: none;
 }
+.warning {
+    border: 1px solid #fc3;
+    background-color: #fef6e7;
+    padding: 8px 12px;
+    color: #333;
+}
 .column {
     width: 190px;
     /* The first item in the column is a 18px-tall <select>.

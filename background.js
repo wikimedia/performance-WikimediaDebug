@@ -197,6 +197,11 @@ const debug = {
             return true;
         }
 
+        if ( request.action === 'get-url-pattern' ) {
+            sendResponse( { urlPatterns: debug.urlPatterns } );
+            return;
+        }
+
         // Optimisation: Only fetch backends when someone opens the popup, not on every page
         // load. That's why content-script has its own action, separate from the 'get-state'
         // action for the popup.

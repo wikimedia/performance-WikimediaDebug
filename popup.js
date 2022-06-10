@@ -11,6 +11,20 @@ function getCurrentTab() {
     } );
 }
 
+const pendingSanitizedHostnames = new Promise(
+    ( resolve ) => {
+        chrome.runtime.sendMessage(
+            { action: 'get-url-pattern' },
+            function ( response ) {
+                const sanitizedHostNames = response.urlPatterns.map(
+                    ( pattern ) => pattern.slice( 6, -2 )
+                );
+                resolve( sanitizedHostNames );
+            }
+        );
+    }
+);
+
 window.addEventListener( 'load', async function () {
     'use strict';
 
@@ -40,6 +54,22 @@ window.addEventListener( 'load', async function () {
         const e = new Event( 'change' );
         this.dispatchEvent( e );
     }
+
+    function getRealm( currentTab, allowedHostnames ) {
+        const currentHostname = currentTab && currentTab.url && new URL( currentTab.url ).hostname || '';
+
+        if ( /wikitech/.test( currentHostname ) ) {
+            return 'other';
+        }
+
+        for ( const allowedHostname of allowedHostnames ) {
+            if ( currentHostname.endsWith( allowedHostname ) ) {
+                return /beta\.wmflabs\.org$/.test( currentHostname ) ? 'beta' : 'production';
+            }
+        }
+        return 'other';
+    }
+
     function onSwitcherKeypress( e ) {
         if ( e.key === ' ' || e.key === 'Enter' ) {
             onSwitcherClick.call( this );
@@ -47,8 +77,13 @@ window.addEventListener( 'load', async function () {
     }
 
     const currentTab = await getCurrentTab();
-    const currentHostname = currentTab && currentTab.url && new URL( currentTab.url ).hostname || '';
-    const currentRealm = /beta\.wmflabs\.org$/.test( currentHostname ) ? 'beta' : 'production';
+    const resolvedSanitizedHostNames = await pendingSanitizedHostnames;
+    const currentRealm = getRealm( currentTab, resolvedSanitizedHostNames );
+
+    if ( currentRealm === 'other' ) {
+        document.querySelector( '.warning' ).hidden = false;
+        document.querySelector( '.main-popup' ).hidden = true;
+    }
 
     chrome.runtime.sendMessage(
         { action: 'get-state', realm: currentRealm },
