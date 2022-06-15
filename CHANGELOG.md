@@ -1,3 +1,10 @@
+## 2.4.6
+
+### Fixed
+
+* popup: Fix beta host menu. (Larissa Gaulia)
+* Fix Logstash url to account for OpenSearch rebrand. (Larissa Gaulia)
+
 ## 2.4.5
 
 ### Fixed
