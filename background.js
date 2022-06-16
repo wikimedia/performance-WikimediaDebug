@@ -38,6 +38,17 @@ function fetchBackends( realm ) {
         .then( ( d ) => d.backends );
 }
 
+function getCurrentTab() {
+    return new Promise( ( resolve ) => {
+        chrome.tabs.query(
+            { active: true, currentWindow: true },
+            ( tabs ) => {
+                resolve( tabs[ 0 ] );
+            }
+        );
+    } );
+}
+
 const debug = {
 
     // The HTTP header we inject.
@@ -61,6 +72,26 @@ const debug = {
             name: 'X-Wikimedia-Debug',
             value: attributes.join( '; ' )
         };
+    },
+
+    /**
+     * @param {string|undefined} url
+     * @return {string}
+     */
+    getRealm: function ( url ) {
+        const currentHostname = url && new URL( url ).hostname || '';
+
+        if ( /wikitech/.test( currentHostname ) ) {
+            return 'other';
+        }
+
+        for ( const urlPattern of debug.urlPatterns ) {
+            const allowedHostname = urlPattern.slice( 6, -2 );
+            if ( currentHostname.endsWith( allowedHostname ) ) {
+                return /beta\.wmflabs\.org$/.test( currentHostname ) ? 'beta' : 'production';
+            }
+        }
+        return 'other';
     },
 
     // We intercept requests to URLs matching these patterns.
@@ -188,18 +219,17 @@ const debug = {
         }
 
         if ( request.action === 'get-state' ) {
-            fetchBackends( request.realm ).then( ( backends ) => {
+            ( async () => {
+                const currentTab = await getCurrentTab();
+                const realm = debug.getRealm( currentTab && currentTab.url );
+                const backends = await fetchBackends( realm );
                 sendResponse( {
-                    backends: backends,
+                    realm,
+                    backends,
                     state: debug.state
                 } );
-            } );
+            } )();
             return true;
-        }
-
-        if ( request.action === 'get-url-pattern' ) {
-            sendResponse( { urlPatterns: debug.urlPatterns } );
-            return;
         }
 
         // Optimisation: Only fetch backends when someone opens the popup, not on every page
