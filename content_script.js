@@ -35,7 +35,10 @@
         }
     }
 
-    chrome.runtime.sendMessage( { action: 'content-script' }, function ( response ) {
+    chrome.runtime.sendMessage( {
+        action: 'content-script',
+        url: location.href
+    }, function ( response ) {
         if ( !response
                 || !response.state.enabled
                 || !( response.state.log || response.state.profile )
@@ -46,7 +49,7 @@
         }
 
         const reqId = response.tabData.reqId;
-        const isBeta = /beta\.wmflabs\.org$/.test( location.hostname );
+        const isBeta = ( response.realm === 'beta' );
 
         if ( response.state.profile ) {
             addFooterPlace(

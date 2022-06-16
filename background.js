@@ -247,6 +247,7 @@ const debug = {
         // Optimisation: Ignore content-script.js when we're disabled.
         if ( request.action === 'content-script' && debug.state.enabled ) {
             sendResponse( {
+                realm: debug.getRealm( request.url ),
                 state: debug.state,
                 tabData: ( tabDatas[ sender.tab && sender.tab.id ] || null )
             } );
