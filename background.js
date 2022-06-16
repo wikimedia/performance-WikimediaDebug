@@ -20,22 +20,41 @@
 // From a chrome.tab.id to some data we maintain
 const tabDatas = {};
 
+const TTL_HOUR = 3600 * 1000;
+const memory = new Map();
+async function memGetWithSet( key, ttl, callback ) {
+    const now = Date.now();
+    let entry = memory.get( key );
+    if ( !entry || entry.time > now || entry.time + ttl < now ) {
+        // Not stored, stored in the future, or stored in the past and expired.
+        // Discard far-future values to recover from accidental system clock change.
+        entry = {
+            time: now,
+            val: await callback()
+        };
+        memory.set( key, entry );
+    }
+    return entry.val;
+}
+
 /**
  * List of backend options to use for the given origin.
  *
  * @param {string} realm
  * @return {Promise<Array>}
  */
-function fetchBackends( realm ) {
-    if ( realm === 'beta' ) {
-        // Avoid showing prod hostnames in beta.
-        // Fixes <https://github.com/wikimedia/WikimediaDebug/issues/14>.
+async function fetchBackends( realm ) {
+    if ( realm !== 'production' ) {
+        // Avoid showing prod hostnames in beta and on other sites.
         return Promise.resolve( [] );
     }
 
-    return fetch( 'https://noc.wikimedia.org/conf/debug.json' )
-        .then( ( r ) => r.json() )
-        .then( ( d ) => d.backends );
+    return memGetWithSet( `backends-${realm}`, TTL_HOUR, async () => {
+        const resp = await fetch( 'https://noc.wikimedia.org/conf/debug.json' );
+        const data = await resp.json();
+        return data.backends;
+    } );
+
 }
 
 function getCurrentTab() {
