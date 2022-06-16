@@ -9,7 +9,7 @@ body {
     color: #333;
 }
 .body-hidden {
-    display: none;
+    visibility: hidden;
 }
 .warning {
     border: 1px solid #fc3;
