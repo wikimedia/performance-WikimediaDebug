@@ -5,6 +5,7 @@
 		"wikimedia/language/es2018"
 	],
 	"rules": {
+		"comma-dangle": "off",
 		"no-implicit-globals": "off",
 		"indent": [ "error", 4 ],
 		"operator-linebreak": [ "error", "before" ]

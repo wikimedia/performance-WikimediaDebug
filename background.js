@@ -141,8 +141,8 @@ const debug = {
         // https://wikitech.wikimedia.org/wiki/X-Wikimedia-Debug#Debug_logging
         log: false,
 
-        // Serve content through PHP 7.4.
-        php74: false
+        // Serve content through PHP 7.4 (T312653).
+        php74: false,
     },
 
     // Toggle enabled state.
@@ -199,6 +199,7 @@ const debug = {
             debug.state.forceprofile = false;
             debug.state.readonly = false;
             debug.state.log = false;
+            debug.state.php74 = false;
 
             debug.setEnabled( false );
         }
