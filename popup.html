@@ -7,22 +7,20 @@
   </head>
   <body class="body-hidden">
     <div class="main-popup">
-      <div class="aside">
-        <div class="ui-switcher option" aria-checked="false" tabindex="0" role="checkbox" id="enabled"><span class="ui-switcher-grip"></span></div>
-      </div>
-      <div class="column">
-        <div>
+      <div class="row">
+        <div class="col">
           <select class="option" id="backend">
             <option value="1" selected>(Backends unknown)</option>
           </select>
         </div>
-        <div>
-          <label class="ui-checkbox"><input class="option" type="checkbox" id="profile"><span></span>XHGui</label>
-          <label class="ui-checkbox"><input class="option" type="checkbox" id="forceprofile"><span></span>Inline profile</label>
-          <label class="ui-checkbox"><input class="option" type="checkbox" id="log"><span></span>Verbose log</label>
-          <label class="ui-checkbox"><input class="option" type="checkbox" id="readonly"><span></span>Read-only</label>
-          <label class="ui-checkbox"><input class="option" type="checkbox" id="php74"><span></span>PHP 7.4</label>
-        </div>
+        <div class="ui-switcher option" aria-checked="false" tabindex="0" role="checkbox" id="enabled"><span class="ui-switcher-grip"></span></div>
+      </div>
+      <div>
+        <label class="ui-checkbox"><input class="option" type="checkbox" id="profile"><span></span>XHGui</label>
+        <label class="ui-checkbox"><input class="option" type="checkbox" id="forceprofile"><span></span>Inline profile</label>
+        <label class="ui-checkbox"><input class="option" type="checkbox" id="log"><span></span>Verbose log</label>
+        <label class="ui-checkbox"><input class="option" type="checkbox" id="readonly"><span></span>Read-only</label>
+        <label class="ui-checkbox"><input class="option" type="checkbox" id="php74"><span></span>PHP 7.4</label>
       </div>
     </div>
     <div class="warning" hidden>
