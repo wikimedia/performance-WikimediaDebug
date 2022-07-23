@@ -1,7 +1,7 @@
 body {
     margin: 0;
     padding: 8px;
-    width: 260px;
+    width: 270px;
     border: 1px solid #a2a9b1;
     background: #fff;
     font-size: 14px;
@@ -17,20 +17,10 @@ body {
     padding: 8px 12px;
     color: #333;
 }
-.column {
-    width: 190px;
-    /* The first item in the column is a 18px-tall <select>.
-       The first item in the aside is a 28px-tall ui-checkbox.
-       Offset the column by 5px so that their middle aligns.
-    */
-    margin-top: 5px;
-}
-.aside {
-    float: right;
-    text-align: right;
-    position: relative;
-    width: 60px;
-    margin-bottom: 6px;
+.row {
+    display: flex;
+    align-items: center; /* align <select> and ui-checkbox */
+    gap: 10px;
 }
 
 /**
