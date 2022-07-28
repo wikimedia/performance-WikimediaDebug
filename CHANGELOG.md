@@ -1,3 +1,15 @@
+## 2.5.0
+
+### Added
+
+* Add "querysort" option ([T138093](https://phabricator.wikimedia.org/T138093)) (Ori Livneh)
+* Add PHP 7.4 option ([T312653](https://phabricator.wikimedia.org/T312653)) (mainframe98)
+* Add "Unsupported domain" indicator ([T269028](https://phabricator.wikimedia.org/T269028)) (Larissa Gaulia)
+
+### Fixed
+
+* background: Faster popup opening by caching backends for 1 hour (Timo Tijhof)
+
 ## 2.4.6
 
 ### Fixed
