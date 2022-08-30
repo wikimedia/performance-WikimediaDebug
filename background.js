@@ -89,9 +89,6 @@ const debug = {
         if ( debug.state.php74 ) {
             attributes.push( 'php74' );
         }
-        if ( debug.state.querysort ) {
-            attributes.push( 'querysort' );
-        }
 
         return {
             name: 'X-Wikimedia-Debug',
@@ -165,10 +162,6 @@ const debug = {
 
         // Serve content through PHP 7.4 (T312653).
         php74: false,
-
-        // Enable query parameter normalization (T138093)
-        // TODO(ori): Remove once query n11n is enabled for all traffic.
-        querysort: false,
     },
 
     // Toggle enabled state.
@@ -226,7 +219,6 @@ const debug = {
             debug.state.readonly = false;
             debug.state.log = false;
             debug.state.php74 = false;
-            debug.state.querysort = false;
 
             debug.setEnabled( false );
         }
@@ -250,7 +242,6 @@ const debug = {
             debug.state.readonly = state.readonly;
             debug.state.log = state.log;
             debug.state.php74 = state.php74;
-            debug.state.querysort = state.querysort;
             return;
         }
 
