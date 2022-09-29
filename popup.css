@@ -22,6 +22,12 @@ body {
     align-items: center; /* align <select> and ui-checkbox */
     gap: 10px;
 }
+.options {
+    margin-top: 8px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
 
 /**
  * Backend host selector
@@ -37,7 +43,7 @@ body {
  */
 
 .ui-checkbox {
-    margin: 8px 5px 0 0;
+    margin: 0;
     display: inline-block;
     position: relative;
 
