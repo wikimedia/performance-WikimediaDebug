@@ -86,9 +86,6 @@ const debug = {
         if ( debug.state.log ) {
             attributes.push( 'log' );
         }
-        if ( debug.state.php74 ) {
-            attributes.push( 'php74' );
-        }
 
         return {
             name: 'X-Wikimedia-Debug',
@@ -159,9 +156,6 @@ const debug = {
         // Enable verbose debug logging
         // https://wikitech.wikimedia.org/wiki/X-Wikimedia-Debug#Debug_logging
         log: false,
-
-        // Serve content through PHP 7.4 (T312653).
-        php74: false,
     },
 
     // Toggle enabled state.
@@ -218,7 +212,6 @@ const debug = {
             debug.state.forceprofile = false;
             debug.state.readonly = false;
             debug.state.log = false;
-            debug.state.php74 = false;
 
             debug.setEnabled( false );
         }
@@ -241,7 +234,6 @@ const debug = {
             debug.state.forceprofile = state.forceprofile;
             debug.state.readonly = state.readonly;
             debug.state.log = state.log;
-            debug.state.php74 = state.php74;
             return;
         }
 
