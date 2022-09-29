@@ -1,3 +1,10 @@
+## 2.6.0
+
+### Removed
+
+* Remove obsolete "querysort" option (Ori Livneh)
+* Remove obsolete PHP 7.4 option (Timo Tijhof)
+
 ## 2.5.0
 
 ### Added
