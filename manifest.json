@@ -30,11 +30,11 @@
                 "*://*.tools.wmflabs.org/*",
                 "*://*.tools-static.wmflabs.org/*"
             ],
-            "js": ["content_script.js"]
+            "js": [ "content_script.js" ]
         }
     ],
     "background": {
-        "scripts": ["background.js"]
+        "scripts": [ "background.js" ]
     },
     "permissions": [
         "alarms",

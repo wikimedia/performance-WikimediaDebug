@@ -189,7 +189,7 @@ const debug = {
 
     onHeadersReceived: function ( resp ) {
         if ( resp.type === 'main_frame' && debug.state.enabled ) {
-            const header = resp.responseHeaders.find( ( header ) => header.name === 'x-request-id' );
+            const header = resp.responseHeaders.find( ( responseHeader ) => responseHeader.name === 'x-request-id' );
             tabDatas[ resp.tabId ] = {
                 reqId: header && header.value
             };

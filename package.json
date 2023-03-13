@@ -1,10 +1,10 @@
 {
-  "private": true,
-  "scripts": {
-    "test": "eslint .",
-    "fix": "eslint --fix ."
-  },
-  "devDependencies": {
-    "eslint-config-wikimedia": "0.16.2"
-  }
+    "private": true,
+    "scripts": {
+        "test": "eslint .",
+        "fix": "eslint --fix ."
+    },
+    "devDependencies": {
+        "eslint-config-wikimedia": "0.24.0"
+    }
 }
