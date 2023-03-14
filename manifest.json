@@ -5,10 +5,10 @@
     "author": "Ori Livneh",
     "version": "2.6.0",
     "icons": {
-        "512": "logo.png"
+        "512": "images/logo.png"
     },
     "browser_action": {
-        "default_icon": "icon-lightmode-128.png",
+        "default_icon": "images/icon-lightmode-128.png",
         "default_title": "WikimediaDebug",
         "default_popup": "popup.html"
     },

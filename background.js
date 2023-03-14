@@ -169,7 +169,7 @@ const debug = {
 
     // Dim the toolbar icon when inactive.
     updateIcon: function () {
-        const path = debug.theme === 'dark' ? 'icon-darkmode-128.png' : 'icon-lightmode-128.png';
+        const path = debug.theme === 'dark' ? 'images/icon-darkmode-128.png' : 'images/icon-lightmode-128.png';
         chrome.browserAction.setIcon( { path: path } );
         if ( debug.state.enabled ) {
             chrome.browserAction.setBadgeBackgroundColor( { color: '#447ff5' } );

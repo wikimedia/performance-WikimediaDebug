@@ -109,7 +109,7 @@ body {
 .ui-checkbox input[type="checkbox"]:checked + span {
     border-color: #36c;
     background-color: #36c;
-    background-image: url(./popup/ooui-check-invert.svg);
+    background-image: url(./images/ooui-check-invert.svg);
 }
 .ui-checkbox input[type="checkbox"]:checked:focus + span {
     box-shadow: inset 0 0 0 1px #36c, inset 0 0 0 2px #fff;
