@@ -8,6 +8,9 @@ body {
     font-family: system-ui, sans-serif;
     color: #202122;
 }
+a {
+    color: #36c;
+}
 .body-hidden {
     opacity: 0.5;
     pointer-events: none;
@@ -28,6 +31,56 @@ body {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
+}
+.output {
+    padding: 0;
+    list-style-position: outside;
+    font-size: 12px;
+    line-height: 1.6;
+    margin: 1rem 0 0 1rem;
+}
+.output li {
+    margin: 0 0 5px 0;
+    padding: 0 10px 5px 5px;
+    background: #f8f9fa;
+    position: relative;
+}
+.output li:first-child {
+    color: #000;
+}
+.output li:first-child::marker {
+    font-weight: bold;
+}
+.output li:first-child::before {
+    content: '•';
+    position: absolute;
+    right: 5px;
+    color: #36c;
+}
+.output-entry {
+    display: flex;
+    flex-flow: row wrap;
+    gap: 5px;
+}
+.output-entry-time {
+    cursor: help;
+}
+.output-entry-host {
+    flex: 1 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.output-entry-url {
+    flex: 1 0 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    font-size: 10px;
+    align-self: center;
+
+    cursor: help;
 }
 
 /**

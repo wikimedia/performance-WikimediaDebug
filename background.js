@@ -17,8 +17,10 @@
 'use strict';
 /* global chrome */
 
-// From a chrome.tab.id to some data we maintain
-const tabDatas = {};
+// The last ten entries to display in the "output" list
+const outputList = [];
+let outputOffset = 0;
+const OUTPUT_MAXLENGTH = 5;
 
 const TTL_HOUR = 3600 * 1000;
 const memory = new Map();
@@ -187,21 +189,44 @@ const debug = {
         return { requestHeaders: req.requestHeaders };
     },
 
+    // https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/webRequest/onHeadersReceived
     onHeadersReceived: function ( resp ) {
         if ( resp.type === 'main_frame' && debug.state.enabled ) {
             const header = resp.responseHeaders.find( ( responseHeader ) => responseHeader.name === 'x-request-id' );
-            tabDatas[ resp.tabId ] = {
-                reqId: header && header.value
-            };
+            const reqId = header && header.value;
+            const isBeta = debug.getRealm( resp.url ) === 'beta';
+            const links = [];
+            if ( debug.state.profile && reqId ) {
+                links.push( {
+                    label: 'Find in XHGui',
+                    href: isBeta
+                        ? 'https://performance.wikimedia.beta.wmflabs.org/xhgui/?url=' + reqId
+                        : 'https://performance.wikimedia.org/xhgui/?url=' + reqId
+                } );
+            }
+            if ( debug.state.log && reqId ) {
+                const logstashDash = isBeta
+                    ? 'https://logstash-beta.wmflabs.org/app/dashboards#/view/x-debug'
+                    : 'https://logstash.wikimedia.org/app/dashboards#/view/x-debug';
+                links.push( {
+                    label: 'Find in Logstash',
+                    href: logstashDash
+                        + '?_g=(time:(from:now-1h,mode:quick,to:now))&'
+                        + '_a=(query:(query_string:(query:%27reqId:%22' + encodeURI( reqId ) + '%22%27)))'
+                } );
+            }
+            if ( links.length ) {
+                outputList.unshift( {
+                    offset: ++outputOffset,
+                    method: resp.method,
+                    href: resp.url,
+                    timestamp: new Date(),
+                    links
+                } );
+                outputList.splice( OUTPUT_MAXLENGTH );
+                chrome.runtime.sendMessage( { action: 'set-output', outputList } );
+            }
         }
-    },
-
-    // https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/tabs/onRemoved
-    onTabRemoved: function ( tabId ) {
-        // The tabId may be unknown, for example:
-        // ... when WikimediaDebug is not enabled at all.
-        // ... when closing a tab that was already open before WikimediaDebug got enabled.
-        delete tabDatas[ tabId ];
     },
 
     // Automatic shutoff.
@@ -245,24 +270,11 @@ const debug = {
                 sendResponse( {
                     realm,
                     backends,
+                    outputList,
                     state: debug.state
                 } );
             } )();
             return true;
-        }
-
-        // Optimisation: Only fetch backends when someone opens the popup, not on every page
-        // load. That's why content-script has its own action, separate from the 'get-state'
-        // action for the popup.
-        //
-        // Optimisation: Ignore content-script.js when we're disabled.
-        if ( request.action === 'content-script' && debug.state.enabled ) {
-            sendResponse( {
-                realm: debug.getRealm( request.url ),
-                state: debug.state,
-                tabData: ( tabDatas[ sender.tab && sender.tab.id ] || null )
-            } );
-            return;
         }
 
         if ( request.action === 'set-theme' ) {
@@ -284,7 +296,5 @@ chrome.webRequest.onBeforeSendHeaders.addListener( debug.onBeforeSendHeaders,
 
 chrome.webRequest.onHeadersReceived.addListener( debug.onHeadersReceived,
     { urls: debug.urlPatterns }, [ 'responseHeaders' ] );
-
-chrome.tabs.onRemoved.addListener( debug.onTabRemoved );
 
 debug.updateIcon();
