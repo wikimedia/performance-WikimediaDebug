@@ -6,10 +6,11 @@ body {
     background: #fff;
     font-size: 14px;
     font-family: system-ui, sans-serif;
-    color: #333;
+    color: #202122;
 }
 .body-hidden {
-    visibility: hidden;
+    opacity: 0.5;
+    pointer-events: none;
 }
 .warning {
     border: 1px solid #fc3;
