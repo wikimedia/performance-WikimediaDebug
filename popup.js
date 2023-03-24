@@ -150,8 +150,12 @@ function onMessage( response ) {
 
     renderOutputList( response.outputList );
 
-    // Remove class="hidden"
-    document.body.className = '';
+    // Remove class="body-hidden"
+    requestAnimationFrame( function () {
+        requestAnimationFrame( function () {
+            document.body.className = '';
+        } );
+    } );
 
     // When opening the popup, also update the theme if needed.
     // E.g. if the color scheme of the OS has changed meanwhile.

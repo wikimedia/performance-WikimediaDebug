@@ -243,8 +243,6 @@ a {
     border: 1px solid transparent;
     border-radius: 1em;
     z-index: 1;
-    -webkit-transition: border-color 250ms;
-    -moz-transition: border-color 250ms;
     transition: border-color 250ms;
 }
 .ui-switcher[aria-checked="true"]:focus:before {
@@ -304,6 +302,14 @@ a {
     background-color: #fff;
     border-color: #fff;
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+}
+
+/* Avoid animation when state is filled by popup opening. */
+.body-hidden .ui-checkbox input[type="checkbox"] + span,
+.body-hidden .ui-switcher,
+.body-hidden .ui-switcher:before,
+.body-hidden .ui-switcher-grip {
+    transition: none;
 }
 
 @media screen and (prefers-color-scheme: dark) {
