@@ -76,6 +76,9 @@ const debug = {
     getHeader: function () {
         const attributes = [ 'backend=' + debug.state.backend ];
 
+        if ( debug.state.excimer ) {
+            attributes.push( 'excimer' );
+        }
         if ( debug.state.profile ) {
             attributes.push( 'profile' );
         }
@@ -145,18 +148,22 @@ const debug = {
         backend: null,
 
         // Send call graph to XHGui
-        // https://wikitech.wikimedia.org/wiki/X-Wikimedia-Debug#Request_profiling
+        // https://wikitech.wikimedia.org/wiki/WikimediaDebug#Request_profiling
+        excimer: false,
+
+        // Send call graph to XHGui
+        // https://wikitech.wikimedia.org/wiki/WikimediaDebug#XHGui_profiling
         profile: false,
 
         // Output inline debug profile in the HTML/JS web response
-        // https://wikitech.wikimedia.org/wiki/X-Wikimedia-Debug#Plaintext_request_profile
+        // https://wikitech.wikimedia.org/wiki/WikimediaDebug#Plaintext_request_profile
         forceprofile: false,
 
-        // Set MediaWiki web request in $wgReadOnly-mode.
+        // Set MediaWiki web request in $wgReadOnly mode.
         readonly: false,
 
         // Enable verbose debug logging
-        // https://wikitech.wikimedia.org/wiki/X-Wikimedia-Debug#Debug_logging
+        // https://wikitech.wikimedia.org/wiki/WikimediaDebug#Debug_logging
         log: false,
     },
 
@@ -192,10 +199,20 @@ const debug = {
     // https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/webRequest/onHeadersReceived
     onHeadersReceived: function ( resp ) {
         if ( resp.type === 'main_frame' && debug.state.enabled ) {
-            const header = resp.responseHeaders.find( ( responseHeader ) => responseHeader.name === 'x-request-id' );
-            const reqId = header && header.value;
+            const reqId = resp.responseHeaders
+                .find( ( responseHeader ) => responseHeader.name === 'x-request-id' )
+                ?.value;
+            const excimerLink = resp.responseHeaders
+                .find( ( responseHeader ) => responseHeader.name === 'excimer-ui-link' )
+                ?.value;
             const isBeta = debug.getRealm( resp.url ) === 'beta';
             const links = [];
+            if ( debug.state.excimer && excimerLink ) {
+                links.push( {
+                    label: 'Open profile in Excimer UI',
+                    href: excimerLink
+                } );
+            }
             if ( debug.state.profile && reqId ) {
                 links.push( {
                     label: 'Find in XHGui',
@@ -233,6 +250,7 @@ const debug = {
     onAlarm: function ( alarm ) {
         if ( alarm.name === 'autoOff' ) {
             // Disable and reset logging/profiling
+            debug.state.excimer = false;
             debug.state.profile = false;
             debug.state.forceprofile = false;
             debug.state.readonly = false;
@@ -255,6 +273,7 @@ const debug = {
             const state = request.state;
             debug.setEnabled( state.enabled );
             debug.state.backend = state.backend;
+            debug.state.excimer = state.excimer;
             debug.state.profile = state.profile;
             debug.state.forceprofile = state.forceprofile;
             debug.state.readonly = state.readonly;
