@@ -232,7 +232,7 @@ a {
     border-color: #2a4b8d;
 }
 
-.ui-switcher:before {
+.ui-switcher::before {
     content: '';
     display: block;
     position: absolute;
@@ -245,11 +245,11 @@ a {
     z-index: 1;
     transition: border-color 250ms;
 }
-.ui-switcher[aria-checked="true"]:focus:before {
+.ui-switcher[aria-checked="true"]:focus::before {
     border-color: #fff;
 }
 
-.ui-switcher:after {
+.ui-switcher::after {
     content: 'OFF';
     display: block;
     line-height: 26px;
@@ -257,7 +257,7 @@ a {
     padding: 0 8px 0 26px;
     text-align: right;
 }
-.ui-switcher[aria-checked="true"]:after {
+.ui-switcher[aria-checked="true"]::after {
     content: 'ON';
     color: #fff;
     padding: 0 26px 0 10px;
@@ -307,7 +307,7 @@ a {
 /* Avoid animation when state is filled by popup opening. */
 .body-hidden .ui-checkbox input[type="checkbox"] + span,
 .body-hidden .ui-switcher,
-.body-hidden .ui-switcher:before,
+.body-hidden .ui-switcher::before,
 .body-hidden .ui-switcher-grip {
     transition: none;
 }
@@ -322,7 +322,7 @@ a {
         background-color: #28292d;
         color: #fff;
     }
-    .ui-switcher:after {
+    .ui-switcher::after {
         color: #fff;
     }
     .ui-switcher:hover {
