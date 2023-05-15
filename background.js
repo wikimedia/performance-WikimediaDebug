@@ -20,7 +20,7 @@
 // The last ten entries to display in the "output" list
 const outputList = [];
 let outputOffset = 0;
-const OUTPUT_MAXLENGTH = 5;
+const OUTPUT_MAXLENGTH = 100;
 
 const TTL_HOUR = 3600 * 1000;
 const memory = new Map();
@@ -198,7 +198,8 @@ const debug = {
 
     // https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/webRequest/onHeadersReceived
     onHeadersReceived: function ( resp ) {
-        if ( resp.type === 'main_frame' && debug.state.enabled ) {
+        if ( debug.state.enabled ) {
+            const isMain = resp.type === 'main_frame';
             const reqId = resp.responseHeaders
                 .find( ( responseHeader ) => responseHeader.name === 'x-request-id' )
                 ?.value;
@@ -233,14 +234,16 @@ const debug = {
                 } );
             }
             if ( links.length ) {
-                outputList.unshift( {
+                outputList.push( {
                     offset: ++outputOffset,
+                    isMain,
                     method: resp.method,
                     href: resp.url,
                     timestamp: new Date(),
                     links
                 } );
-                outputList.splice( OUTPUT_MAXLENGTH );
+                // Remove any old entries, keep the last 100
+                outputList.splice( 0, outputList.length - OUTPUT_MAXLENGTH );
                 chrome.runtime.sendMessage( { action: 'set-output', outputList } );
             }
         }

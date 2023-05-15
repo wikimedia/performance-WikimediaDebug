@@ -29,16 +29,20 @@ function renderOutputList( outputList ) {
     listElement.innerHTML = '';
     const d12hAgo = new Date();
     d12hAgo.setHours( d12hAgo.getHours() - 12 );
+    let lastMainItem = null;
     for ( const entry of outputList ) {
         const itemElement = document.createElement( 'li' );
         itemElement.value = entry.offset;
+        if ( entry.isMain ) {
+            itemElement.dataset.main = 'true';
+            lastMainItem = itemElement;
+        }
         // Support Chrome: Chrome encodes Date objects as ISO string,
         // whereas Firefox performs a structuredClone()
         const d = new Date( entry.timestamp );
-        const url = new URL( entry.href );
         // Use undefined to let user agent decide
         // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl
-        const fullDateFmt = d.toLocaleString( undefined, { dateStyle: 'medium', timeStyle: 'short', hour12: false } );
+        const fullDateFmt = d.toLocaleString( undefined, { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: false } );
         const timeFmt = d < d12hAgo
             ? d.toLocaleDateString( undefined, { weekday: 'short' } )
             : d.toLocaleTimeString( undefined, { timeStyle: 'short', hour12: false } );
@@ -54,17 +58,17 @@ function renderOutputList( outputList ) {
             );
         } );
         itemElement.append(
-            dom( 'span', { className: 'output-entry' },
-                dom( 'time', { className: 'output-entry-time', title: 'Captured at ' + fullDateFmt }, timeFmt ),
+            dom( 'span', { className: 'output-entry', title: `Captured from ${entry.href} at ${fullDateFmt}`, tabIndex: '0' },
+                dom( 'time', { className: 'output-entry-time' }, timeFmt ),
                 ' ',
-                dom( 'span', { className: 'output-entry-method' }, entry.method ),
-                ' ',
-                dom( 'span', { className: 'output-entry-host' }, url.host ),
-                ' ',
-                dom( 'span', { className: 'output-entry-url', title: entry.href }, url.pathname + url.search ),
+                dom( 'span', { className: 'output-entry-url' }, entry.href ),
             )
         );
         listElement.append( itemElement );
+    }
+    if ( lastMainItem ) {
+        lastMainItem.scrollIntoView( { behavior: 'instant', block: 'start', inline: 'start' } );
+        lastMainItem.focus();
     }
 }
 

@@ -34,53 +34,51 @@ a {
 }
 .output {
     padding: 0;
-    list-style-position: outside;
+    list-style-position: inside;
     font-size: 12px;
     line-height: 1.6;
-    margin: 1rem 0 0 1rem;
+    margin: 1rem 0 0 0;
+    /* In Firefox and Chrome, the popup is capped to 600px.
+       Reserve about 150px for form controls. */
+    max-height: 450px;
+    overflow-y: auto;
 }
 .output li {
-    margin: 0 0 5px 0;
+    margin: 0;
     padding: 0 10px 5px 5px;
     background: #f8f9fa;
     position: relative;
+    font-size: 10px;
 }
-.output li:first-child {
+.output li[data-main] ~ .output li[data-main] {
+    margin: 5px 0 0 0;
+}
+.output li[data-main] {
     color: #000;
-}
-.output li:first-child::marker {
     font-weight: bold;
+    font-size: 12px;
 }
-.output li:first-child::before {
+.output li[data-main]::before {
     content: '•';
     position: absolute;
     right: 5px;
     color: #36c;
 }
 .output-entry {
+    margin-left: 1rem;
     display: flex;
     flex-flow: row wrap;
     gap: 5px;
-}
-.output-entry-time {
     cursor: help;
 }
-.output-entry-host {
+.output li:not([data-main]) .output-entry-time {
+    display: none;
+}
+.output-entry-url {
     flex: 1 1;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-}
-.output-entry-url {
-    flex: 1 0 100%;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-
-    font-size: 10px;
-    align-self: center;
-
-    cursor: help;
 }
 
 /**
