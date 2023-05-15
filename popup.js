@@ -118,7 +118,6 @@ function onMessage( response ) {
 
     if ( response.realm === 'other' ) {
         document.querySelector( '.warning' ).hidden = false;
-        document.querySelector( '.main-popup' ).hidden = true;
     }
 
     if ( response.backends ) {
@@ -126,7 +125,8 @@ function onMessage( response ) {
         backendElement.innerHTML = '';
         response.backends.forEach( function ( backend ) {
             const item = document.createElement( 'option' );
-            item.value = item.textContent = backend;
+            item.value = backend;
+            item.textContent = backend === '1' ? '(Unspecified backend)' : backend;
             backendElement.appendChild( item );
         } );
     }

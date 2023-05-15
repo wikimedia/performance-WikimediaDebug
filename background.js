@@ -48,7 +48,7 @@ async function memGetWithSet( key, ttl, callback ) {
 async function fetchBackends( realm ) {
     if ( realm !== 'production' ) {
         // Avoid showing prod hostnames in beta and on other sites.
-        return Promise.resolve( [] );
+        return Promise.resolve( [ '1' ] );
     }
 
     return memGetWithSet( `backends-${realm}`, TTL_HOUR, async () => {

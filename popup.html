@@ -6,11 +6,14 @@
     <link rel="stylesheet" href="popup.css">
   </head>
   <body class="body-hidden">
+    <div class="warning" hidden>
+      <p>Unsupported domain.</p>
+    </div>
     <div class="main-popup">
       <div class="row">
         <div class="col">
           <select class="option" id="backend">
-            <option value="1" selected>(Backends unknown)</option>
+            <option value="1" selected>(Unspecified backend)</option>
           </select>
         </div>
         <div class="ui-switcher option" aria-checked="false" tabindex="0" role="checkbox" id="enabled"><span class="ui-switcher-grip"></span></div>
@@ -22,9 +25,6 @@
         <label class="ui-checkbox"><input class="option" type="checkbox" id="log"><span></span>Verbose log</label>
         <label class="ui-checkbox"><input class="option" type="checkbox" id="readonly"><span></span>Read-only DB</label>
       </div>
-    </div>
-    <div class="warning" hidden>
-      <p>Unsupported domain.</p>
     </div>
     <ol class="output"></ol>
     <script src="popup.js"></script>
