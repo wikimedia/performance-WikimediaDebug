@@ -7,6 +7,13 @@ body {
     font-size: 14px;
     font-family: system-ui, sans-serif;
     color: #202122;
+
+    box-sizing: border-box;
+    display: flex;
+    flex-flow: column nowrap;
+    /* Firefox and Chrome cap popups to 600px.
+       Reserve about 150px for form controls, rest for output links. */
+    max-height: 600px;
 }
 a {
     color: #36c;
@@ -39,9 +46,6 @@ a {
     font-size: 12px;
     line-height: 1.6;
     margin: 1rem 0 0 0;
-    /* In Firefox and Chrome, the popup is capped to 600px.
-       Reserve about 150px for form controls. */
-    max-height: 450px;
     overflow-y: auto;
 }
 .output li {
@@ -51,7 +55,7 @@ a {
     position: relative;
     font-size: 10px;
 }
-.output li[data-main] ~ .output li[data-main] {
+.output li[data-main] ~ li[data-main] {
     margin: 5px 0 0 0;
 }
 .output li[data-main] {

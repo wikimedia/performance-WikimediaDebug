@@ -1,3 +1,17 @@
+## 2.7.0
+
+### Added
+
+* Add "Excimer UI" option (Timo Tijhof) ([T291015](https://phabricator.wikimedia.org/T291015))
+* Create new "output" area with last five xhgui/excimer/logstash links (Timo Tijhof)
+
+## Fixed
+
+* Fix unwanted animation in Chrome when popup opens ([T331249](https://phabricator.wikimedia.org/T331249))
+* Improve "Unsupported" warning to render above form controls
+* Improve "Read-only" label to say "Read-only DB"
+* Faster popup render time by removing the "empty page" phase ([change 899034](https://gerrit.wikimedia.org/r/c/performance/WikimediaDebug/+/899034))
+
 ## 2.6.0
 
 ### Removed
