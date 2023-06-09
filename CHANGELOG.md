@@ -1,3 +1,9 @@
+## 2.7.1
+
+## Fixed
+
+* Fix dark mode version of the new output links area.
+
 ## 2.7.0
 
 ### Added
