@@ -1,12 +1,79 @@
+:root {
+    /* https://design.wikimedia.org/style-guide/ */
+    --wmui-color-base0:    #000;
+    --wmui-color-base10:   #202122;
+    --wmui-color-base20:   #54595d;
+    --wmui-color-base30:   #72777d;
+    --wmui-color-base50:   #a2a9b1;
+    --wmui-color-base70:   #c8ccd1;
+    --wmui-color-base80:   #eaecf0;
+    --wmui-color-base90:   #f8f9fa;
+    --wmui-color-base100:  #fff;
+    --wmui-color-accent30: #2a4b8d;
+    --wmui-color-accent50: #36c;
+    --wmui-color-accent--hover: #447ff5;
+    --wmui-color-accent90: #eaf3ff;
+    --wmui-color-red30:    #b32424;
+    --wmui-color-red50:    #d33;
+    --wmui-color-red90:    #fee7e6;
+    --wmui-color-yellow30: #ac6600;
+    --wmui-color-yellow50: #fc3;
+    --wmui-color-yellow90: #fef6e7;
+    --wmui-color-green30:  #14866d;
+    --wmui-color-green50:  #00af89;
+    --wmui-color-green90:  #d5fdf4;
+
+    --xwd-body-background: var(--wmui-color-base100);
+    --xwd-body-text: var(--wmui-color-base10);
+    --xwd-body-text--strong: var(--wmui-color-base0);
+    --xwd-body-border: var(--wmui-color-base50);
+
+    --xwd-link-text: var(--wmui-color-accent50);
+
+    --xwd-switcher-background: var(--wmui-color-base80);
+    --xwd-switcher-background--hover: var(--wmui-color-base100);
+    --xwd-switcher-text: var(--wmui-color-base10);
+    --xwd-switcher-border: var(--wmui-color-base30);
+    --xwd-switcher-accent: var(--wmui-color-accent50);
+    --xwd-switcher-accent--hover: var(--wmui-color-accent--hover);
+    --xwd-switcher-accent--active: var(--wmui-color-accent30);
+    --xwd-switcher-accent--text: var(--wmui-color-base100);
+
+    --xwd-check-background: var(--wmui-color-base100);
+    --xwd-check-border: var(--wmui-color-base30);
+    --xwd-check-accent: var(--wmui-color-accent50);
+    --xwd-check-accent--hover: var(--wmui-color-accent--hover);
+    --xwd-check-accent--active: var(--wmui-color-accent30);
+
+    --xwd-separator-border: var(--wmui-color-base30);
+}
+@media screen and (prefers-color-scheme: dark) {
+    :root {
+        --xwd-body-background: var(--wmui-color-base10);
+        --xwd-body-text: var(--wmui-color-base90);
+        --xwd-body-text--strong: var(--wmui-color-base100);
+        --xwd-body-border: var(--wmui-color-base0);
+
+        --xwd-link-text: var(--wmui-color-accent--hover);
+
+        --xwd-switcher-background: var(--wmui-color-base10);
+        --xwd-switcher-background--hover: var(--wmui-color-base20);
+        --xwd-switcher-text: var(--wmui-color-base90);
+        --xwd-switcher-border: var(--wmui-color-base30);
+
+        --xwd-separator-border: var(--wmui-color-base30);
+    }
+}
+
 body {
     margin: 0;
     padding: 8px;
     width: 270px;
-    border: 1px solid #a2a9b1;
-    background: #fff;
+    border: 1px solid var(--xwd-body-border);
+    background: var(--xwd-body-background);
     font-size: 14px;
     font-family: system-ui, sans-serif;
-    color: #202122;
+    color: var(--xwd-body-text);
 
     box-sizing: border-box;
     display: flex;
@@ -16,18 +83,18 @@ body {
     max-height: 600px;
 }
 a {
-    color: #36c;
+    color: var(--xwd-link-text);
 }
 .body-hidden {
     opacity: 0.5;
     pointer-events: none;
 }
 .warning {
-    border: 1px solid #fc3;
-    background-color: #fef6e7;
+    border: 1px solid var(--wmui-color-yellow50);
+    background-color: var(--wmui-color-yellow90);
     padding: 4px 12px;
     margin-bottom: 16px;
-    color: #333;
+    color: var(--wmui-color-base10);
 }
 .row {
     display: flex;
@@ -51,15 +118,15 @@ a {
 .output li {
     margin: 0;
     padding: 0 10px 5px 5px;
-    background: #f8f9fa;
     position: relative;
     font-size: 10px;
 }
 .output li[data-main] ~ li[data-main] {
-    margin: 5px 0 0 0;
+    border-top: 1px solid var(--xwd-separator-border);
+    padding-top: 5px;
 }
 .output li[data-main] {
-    color: #000;
+    color: var(--xwd-body-text--strong);
     font-weight: bold;
     font-size: 12px;
 }
@@ -67,7 +134,7 @@ a {
     content: '•';
     position: absolute;
     right: 5px;
-    color: #36c;
+    color: var(--xwd-link-text);
 }
 .output-entry {
     margin-left: 1rem;
@@ -139,10 +206,10 @@ a {
 
     border-width: 1px;
     border-style: solid;
-    border-color: #72777d;
+    border-color: var(--xwd-check-border);
     border-radius: 2px;
 
-    background-color: #fff;
+    background-color: var(--xwd-check-background);
     background-size: 12px 12px;
     background-position: center center;
     background-repeat: no-repeat;
@@ -151,42 +218,40 @@ a {
 }
 
 .ui-checkbox input[type="checkbox"]:focus + span {
-    border-color: #36c;
-    box-shadow: inset 0 0 0 1px #36c;
+    border-color: var(--xwd-check-accent);
+    box-shadow: inset 0 0 0 1px var(--xwd-check-accent);
 }
 .ui-checkbox input[type="checkbox"]:hover + span {
-    border-color: #36c;
+    border-color: var(--xwd-check-accent);
 }
 .ui-checkbox input[type="checkbox"]:active + span {
-    background-color: #2a4b8d;
-    border-color: #2a4b8d;
-    box-shadow: inset 0 0 0 1px #2a4b8d;
+    background-color: var(--xwd-check-accent--active);
+    border-color: var(--xwd-check-accent--active);
+    box-shadow: inset 0 0 0 1px var(--xwd-check-accent--active);
 }
 
 .ui-checkbox input[type="checkbox"]:checked + span {
-    border-color: #36c;
-    background-color: #36c;
+    border-color: var(--xwd-check-accent);
+    background-color: var(--xwd-check-accent);
     background-image: url(./images/ooui-check-invert.svg);
 }
 .ui-checkbox input[type="checkbox"]:checked:focus + span {
-    box-shadow: inset 0 0 0 1px #36c, inset 0 0 0 2px #fff;
+    box-shadow: inset 0 0 0 1px var(--xwd-check-accent), inset 0 0 0 2px var(--xwd-check-background);
 }
 .ui-checkbox input[type="checkbox"]:checked:hover + span {
-    background-color: #447ff5;
-    border-color: #447ff5;
+    background-color: var(--xwd-check-accent--hover);
+    border-color: var(--xwd-check-accent--hover);
 }
 .ui-checkbox input[type="checkbox"]:checked:active + span {
-    background-color: #2a4b8d;
-    border-color: #2a4b8d;
-    box-shadow: inset 0 0 0 1px #2a4b8d;
+    background-color: var(--xwd-check-accent--active);
+    border-color: var(--xwd-check-accent--active);
+    box-shadow: inset 0 0 0 1px var(--xwd-check-accent--active);
 }
 
 
 /**
  * Main switcher
  */
-
-
 .ui-switcher {
     font-size: 14px;
     cursor: pointer;
@@ -197,42 +262,42 @@ a {
     overflow: hidden;
     box-sizing: border-box;
     transform: translateZ(0);
-    background-color: #f8f9fa;
+    background-color: var(--xwd-switcher-background);
     min-width: 4.5em;
     min-height: 26px;
     height: 2em;
-    border: 1px solid #72777d;
+    border: 1px solid var(--xwd-switcher-border);
     border-radius: 14px;
     margin-right: 0;
     transition: background-color 250ms, border-color 250ms;
 }
 .ui-switcher:hover {
-    background-color: #fff;
-    border-color: #447ff5;
+    background-color: var(--xwd-switcher-background--hover);
+    border-color: var(--xwd-switcher-accent--hover);
 }
 .ui-switcher:focus {
-    border-color: #36c;
-    box-shadow: inset 0 0 0 1px #36c;
+    border-color: var(--xwd-switcher-accent);
+    box-shadow: inset 0 0 0 1px var(--xwd-switcher-accent);
     outline: 0;
 }
 .ui-switcher:active {
-    background-color: #2a4b8d;
-    border-color: #2a4b8d;
+    background-color: var(--xwd-switcher-accent--active);
+    border-color: var(--xwd-switcher-accent--active);
 }
 .ui-switcher[aria-checked="true"] {
-    background-color: #36c;
-    border-color: #36c;
+    background-color: var(--xwd-switcher-accent);
+    border-color: var(--xwd-switcher-accent);
 }
 .ui-switcher[aria-checked="true"]:hover {
-    background-color: #447ff5;
-    border-color: #447ff5;
+    background-color: var(--xwd-switcher-accent--hover);
+    border-color: var(--xwd-switcher-accent--hover);
 }
 .ui-switcher[aria-checked="true"]:focus {
-    border-color: #36c;
+    border-color: var(--xwd-switcher-accent);
 }
 .ui-switcher[aria-checked="true"]:active {
-    background-color: #2a4b8d;
-    border-color: #2a4b8d;
+    background-color: var(--xwd-switcher-accent--active);
+    border-color: var(--xwd-switcher-accent--active);
 }
 
 .ui-switcher::before {
@@ -249,20 +314,20 @@ a {
     transition: border-color 250ms;
 }
 .ui-switcher[aria-checked="true"]:focus::before {
-    border-color: #fff;
+    border-color: var(--xwd-switcher-accent--text);
 }
 
 .ui-switcher::after {
     content: 'OFF';
     display: block;
     line-height: 26px;
-    color: #333;
+    color: var(--xwd-switcher-text);
     padding: 0 8px 0 26px;
     text-align: right;
 }
 .ui-switcher[aria-checked="true"]::after {
     content: 'ON';
-    color: #fff;
+    color: var(--xwd-switcher-accent--text);
     padding: 0 26px 0 10px;
     text-align: left;
 }
@@ -283,27 +348,27 @@ a {
     left: 5px;
     margin-left: 0;
 
-    background-color: #f8f9fa;
-    border: 1px solid #72777d;
+    background-color: var(--xwd-switcher-accent--text);
+    border: 1px solid var(--xwd-switcher-border);
 }
 .ui-switcher:hover .ui-switcher-grip {
-    background-color: #fff;
-    border-color: #447ff5;
+    background-color: var(--xwd-switcher-background--hover);
+    border-color: var(--xwd-switcher-accent--hover);
 }
 .ui-switcher:focus .ui-switcher-grip {
-    border-color: #36c;
+    border-color: var(--xwd-switcher-accent);
 }
 .ui-switcher:active .ui-switcher-grip {
-    background-color: #fff;
-    border-color: #fff;
+    background-color: var(--xwd-switcher-background--hover);
+    border-color: var(--xwd-switcher-background--hover);
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
 }
 .ui-switcher[aria-checked="true"] .ui-switcher-grip {
     left: calc(100% - 16px - 5px);
     margin-left: -2px;
 
-    background-color: #fff;
-    border-color: #fff;
+    background-color: var(--xwd-switcher-accent--text);
+    border-color: var(--xwd-switcher-accent--text);
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
 }
 
@@ -313,22 +378,4 @@ a {
 .body-hidden .ui-switcher::before,
 .body-hidden .ui-switcher-grip {
     transition: none;
-}
-
-@media screen and (prefers-color-scheme: dark) {
-    body {
-        background-color: #28292d;
-        color: #dfdfdf;
-        border-color: #1c1c1c;
-    }
-    .ui-switcher {
-        background-color: #28292d;
-        color: #fff;
-    }
-    .ui-switcher::after {
-        color: #fff;
-    }
-    .ui-switcher:hover {
-        background-color: #4b4c4f;
-    }
 }
