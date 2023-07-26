@@ -123,6 +123,7 @@ const debug = {
         '*://*.mediawiki.org/*',
         '*://*.wikidata.org/*',
         '*://*.wikibooks.org/*',
+        '*://*.wikifunctions.org/*',
         '*://*.wikimedia.org/*',
         '*://*.wikinews.org/*',
         '*://*.wikipedia.org/*',

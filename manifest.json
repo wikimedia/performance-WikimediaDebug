@@ -22,6 +22,7 @@
         "webRequestBlocking",
         "*://*.mediawiki.org/*",
         "*://*.wikidata.org/*",
+        "*://*.wikifunctions.org/*",
         "*://*.wikibooks.org/*",
         "*://*.wikimedia.org/*",
         "*://*.wikinews.org/*",
