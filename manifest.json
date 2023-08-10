@@ -3,7 +3,7 @@
     "name": "WikimediaDebug",
     "description": "Control the X-Wikimedia-Debug header on HTTP requests.",
     "author": "Ori Livneh",
-    "version": "2.7.1",
+    "version": "2.8.0",
     "icons": {
         "512": "images/logo.png"
     },
