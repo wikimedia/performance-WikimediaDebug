@@ -2,7 +2,7 @@
 
 ## Added
 
-* Add wikifunctions.org (James Forrester). ([T275945](phabricator.wikimedia.org/T275945))
+* Add wikifunctions.org (James Forrester). ([T275945](https://phabricator.wikimedia.org/T275945))
 
 ## 2.7.1
 
