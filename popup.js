@@ -58,7 +58,7 @@ function renderOutputList( outputList ) {
             );
         } );
         itemElement.append(
-            dom( 'span', { className: 'output-entry', title: `Captured from ${entry.href} at ${fullDateFmt}`, tabIndex: '0' },
+            dom( 'span', { className: 'output-entry', title: `Captured from ${ entry.href } at ${ fullDateFmt }`, tabIndex: '0' },
                 dom( 'time', { className: 'output-entry-time' }, timeFmt ),
                 ' ',
                 dom( 'span', { className: 'output-entry-url' }, entry.href ),

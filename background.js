@@ -51,7 +51,7 @@ async function fetchBackends( realm ) {
         return Promise.resolve( [ '1' ] );
     }
 
-    return memGetWithSet( `backends-${realm}`, TTL_HOUR, async () => {
+    return memGetWithSet( `backends-${ realm }`, TTL_HOUR, async () => {
         const resp = await fetch( 'https://noc.wikimedia.org/conf/debug.json' );
         const data = await resp.json();
         return data.backends;
