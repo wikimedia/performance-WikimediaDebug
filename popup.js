@@ -4,7 +4,7 @@ const pendingState = new Promise(
     ( resolve ) => {
         chrome.runtime.sendMessage(
             { action: 'get-state' },
-            function ( response ) {
+            ( response ) => {
                 resolve( response );
             }
         );
@@ -88,7 +88,7 @@ function onMessage( response ) {
     function onUpdate() {
         const message = { action: 'set-state', state: {} };
 
-        optionElements.forEach( function ( el ) {
+        optionElements.forEach( ( el ) => {
             let newValue;
             if ( el.checked !== undefined ) {
                 newValue = el.checked;
@@ -123,7 +123,7 @@ function onMessage( response ) {
     if ( response.backends ) {
         const backendElement = document.querySelector( '#backend' );
         backendElement.innerHTML = '';
-        response.backends.forEach( function ( backend ) {
+        response.backends.forEach( ( backend ) => {
             const item = document.createElement( 'option' );
             item.value = backend;
             item.textContent = backend === '1' ? '(Unspecified backend)' : backend;
@@ -131,7 +131,7 @@ function onMessage( response ) {
         } );
     }
 
-    optionElements.forEach( function ( el ) {
+    optionElements.forEach( ( el ) => {
         const value = response.state[ el.id ];
         if ( value !== null ) {
             if ( el.checked !== undefined ) {
@@ -155,8 +155,8 @@ function onMessage( response ) {
     renderOutputList( response.outputList );
 
     // Remove class="body-hidden"
-    requestAnimationFrame( function () {
-        requestAnimationFrame( function () {
+    requestAnimationFrame( () => {
+        requestAnimationFrame( () => {
             document.body.className = '';
         } );
     } );

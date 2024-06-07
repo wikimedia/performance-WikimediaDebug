@@ -6,6 +6,6 @@
         "changelog": "git log --format='* %s (%aN)' --no-merges --reverse $(git describe --tags --abbrev=0 HEAD)...HEAD | sort | grep -vE '^\\* (build|docs?|tests?):'"
     },
     "devDependencies": {
-        "eslint-config-wikimedia": "0.27.0"
+        "eslint-config-wikimedia": "0.28.0"
     }
 }
