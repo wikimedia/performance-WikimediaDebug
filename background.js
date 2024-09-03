@@ -105,10 +105,6 @@ const debug = {
     getRealm: function ( url ) {
         const currentHostname = url && new URL( url ).hostname || '';
 
-        if ( /wikitech/.test( currentHostname ) ) {
-            return 'other';
-        }
-
         for ( const urlPattern of debug.urlPatterns ) {
             const allowedHostname = urlPattern.slice( 6, -2 );
             if ( currentHostname.endsWith( allowedHostname ) ) {
