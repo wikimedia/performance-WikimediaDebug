@@ -1,3 +1,9 @@
+## 2.9.0
+
+## Added
+
+* Allow wikitech.wikimedia.org ([T371537](https://phabricator.wikimedia.org/T371537))
+
 ## 2.8.0
 
 ## Added
