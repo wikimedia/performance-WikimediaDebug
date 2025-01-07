@@ -1,4 +1,5 @@
 /**
+ * Copyright 2025 Wikimedia Foundation and contributors.
  * Copyright 2018, 2019 Timo Tijhof <krinklemail@gmail.com>
  * Copyright 2015, 2016 Ori Livneh <ori@wikimedia.org>
  *
@@ -23,10 +24,9 @@ let outputOffset = 0;
 const OUTPUT_MAXLENGTH = 100;
 
 const TTL_HOUR = 3600 * 1000;
-const memory = new Map();
 async function memGetWithSet( key, ttl, callback ) {
     const now = Date.now();
-    let entry = memory.get( key );
+    let entry = ( await chrome.storage.local.get( [ key ] ) )[ key ];
     if ( !entry || entry.time > now || entry.time + ttl < now ) {
         // Not stored, stored in the future, or stored in the past and expired.
         // Discard far-future values to recover from accidental system clock change.
@@ -34,7 +34,7 @@ async function memGetWithSet( key, ttl, callback ) {
             time: now,
             val: await callback()
         };
-        memory.set( key, entry );
+        await chrome.storage.local.set( { [ key ]: entry } );
     }
     return entry.val;
 }
@@ -72,8 +72,12 @@ function getCurrentTab() {
 
 const debug = {
 
-    // The HTTP header we inject.
-    getHeader: function () {
+    /**
+     * The X-Wikimedia-Debug header directives we will inject into requests.
+     *
+     * @return {string}
+     */
+    getHeaderDirectives: function () {
         const attributes = [ 'backend=' + debug.state.backend ];
 
         if ( debug.state.excimer ) {
@@ -91,11 +95,7 @@ const debug = {
         if ( debug.state.log ) {
             attributes.push( 'log' );
         }
-
-        return {
-            name: 'X-Wikimedia-Debug',
-            value: attributes.join( '; ' )
-        };
+        return attributes.join( '; ' );
     },
 
     /**
@@ -115,27 +115,7 @@ const debug = {
     },
 
     // We intercept requests to URLs matching these patterns.
-    urlPatterns: [
-        '*://*.mediawiki.org/*',
-        '*://*.wikidata.org/*',
-        '*://*.wikibooks.org/*',
-        '*://*.wikifunctions.org/*',
-        '*://*.wikimedia.org/*',
-        '*://*.wikinews.org/*',
-        '*://*.wikipedia.org/*',
-        '*://*.wikiquote.org/*',
-        '*://*.wikisource.org/*',
-        '*://*.wikiversity.org/*',
-        '*://*.wikivoyage.org/*',
-        '*://*.wiktionary.org/*',
-        '*://*.beta.wmflabs.org/*',
-        '*://*.tools.wmflabs.org/*',
-        '*://*.tools-static.wmflabs.org/*'
-    ],
-
-    theme: ( window.matchMedia( '(prefers-color-scheme: dark)' ).matches )
-        ? 'dark'
-        : 'light',
+    urlPatterns: chrome.runtime.getManifest().host_permissions,
 
     state: {
         // Current state: if true, inject header; if not, do nothing.
@@ -164,36 +144,115 @@ const debug = {
         log: false,
     },
 
-    // Toggle enabled state.
+    /**
+     * Toggle enabled state.
+     *
+     * @param {bool} value
+     */
     setEnabled: function ( value ) {
         debug.state.enabled = value;
         debug.updateIcon();
+        debug.updateDNRRules();
         if ( debug.state.enabled ) {
             chrome.alarms.create( 'autoOff', { delayInMinutes: 15 } );
         }
     },
 
-    // Dim the toolbar icon when inactive.
+    /**
+     * Add an "on" badge to the icon when enabled.
+     */
     updateIcon: function () {
-        const path = debug.theme === 'dark' ? 'images/icon-darkmode-128.png' : 'images/icon-lightmode-128.png';
-        chrome.browserAction.setIcon( { path: path } );
+        // TODO: restore Chrome theme based light/dark icon support
+        // Firefox is handled by manifest.json's `action.theme_icons`
+        // settings. Be aware that the Firefox support uses naming that is
+        // inverted from common usage. The "light" and "dark" variants refer
+        // to the text/colors of the icon, not the system theme's colors.
         if ( debug.state.enabled ) {
-            chrome.browserAction.setBadgeBackgroundColor( { color: '#447ff5' } );
-            chrome.browserAction.setBadgeText( { text: 'ON' } );
+            chrome.action.setBadgeBackgroundColor( { color: '#447ff5' } );
+            chrome.action.setBadgeText( { text: 'ON' } );
         } else {
-            chrome.browserAction.setBadgeText( { text: '' } );
+            chrome.action.setBadgeText( { text: '' } );
         }
     },
 
-    // Inject header when active.
-    onBeforeSendHeaders: function ( req ) {
-        if ( debug.state.enabled ) {
-            req.requestHeaders.push( debug.getHeader() );
-        }
-        return { requestHeaders: req.requestHeaders };
+    /**
+     * Build an array of declarativeNetRequest rules that will apply the
+     * currently configured X-Wikimedia-Debug header to requests for URLs from
+     * our configured domains.
+     *
+     * @return {Array}
+     */
+    buildDNRRules: function () {
+        const ourDomains = debug.urlPatterns.map(
+            ( urlPattern ) => urlPattern.slice( 6, -2 )
+        );
+        // The spec makes it sound like the `condition.resourceTypes` value is
+        // optional. In practice however Chrome seems to not apply a rule to
+        // top-level navigation actions (clicking links, URL bar changes)
+        // unless the 'main_frame' type is specified.
+        // We want the header injected in all requests, not just top-level
+        // actions, so we will enable the full set of resource types the
+        // browser runtime knows about. Chrome and Firefox have different
+        // resource types available for use in a rule's
+        // `condition.resourceTypes` collection.
+        const allTypes = Object.values(
+            chrome.declarativeNetRequest.ResourceType
+        );
+        return [
+            {
+                id: 1,
+                priority: 1,
+                action: {
+                    type: 'modifyHeaders',
+                    requestHeaders: [
+                        {
+                            operation: 'set',
+                            header: 'X-Wikimedia-Debug',
+                            value: debug.getHeaderDirectives()
+                        }
+                    ]
+                },
+                condition: {
+                    requestDomains: ourDomains,
+                    resourceTypes: allTypes,
+                }
+            }
+        ];
     },
 
-    // https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/webRequest/onHeadersReceived
+    /**
+     * Add/remove declarativeNetRequest rules based on the current enabled
+     * state.
+     */
+    updateDNRRules: function () {
+        ( async () => {
+            const DNR = chrome.declarativeNetRequest;
+            try {
+                const oldRules = await DNR.getSessionRules();
+                const newRules = debug.state.enabled
+                    ? debug.buildDNRRules()
+                    : [];
+                await DNR.updateSessionRules( {
+                    removeRuleIds: oldRules.map( ( rule ) => rule.id ),
+                    addRules: newRules,
+                } );
+                const activeRules = await DNR.getSessionRules();
+                console.log( 'Installed rules', activeRules );
+            } catch ( e ) {
+                console.log( 'Failed to update rules', e );
+            }
+        } )();
+    },
+
+    /**
+     * Propagate interesting response meta information as the payload of
+     * a 'set-output' message when enabled. Our popup.js listens for this
+     * message and modifies the active tab's DOM.
+     *
+     * https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/webRequest/onHeadersReceived
+     *
+     * @param {object} resp
+     */
     onHeadersReceived: function ( resp ) {
         if ( debug.state.enabled ) {
             const isMain = resp.type === 'main_frame';
@@ -246,7 +305,11 @@ const debug = {
         }
     },
 
-    // Automatic shutoff.
+    /**
+     * Disable automatically when an 'autoOff' alarm is received.
+     *
+     * @param {object} alarm
+     */
     onAlarm: function ( alarm ) {
         if ( alarm.name === 'autoOff' ) {
             // Disable and reset logging/profiling
@@ -261,6 +324,8 @@ const debug = {
     },
 
     /**
+     * Process messages sent by popup.js.
+     *
      * @see https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/runtime/onMessage
      * @param {Object} request
      * @param {Object} sender https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/runtime/MessageSender
@@ -295,25 +360,16 @@ const debug = {
             } )();
             return true;
         }
-
-        if ( request.action === 'set-theme' ) {
-            if ( debug.theme !== request.theme ) {
-                debug.theme = request.theme === 'dark' ? 'dark' : 'light';
-                debug.updateIcon();
-            }
-            return;
-        }
+        // TODO: restore Chrome theme based light/dark icon support
     }
 };
 
+// Install handler for inter-script messages from popup.js
 chrome.runtime.onMessage.addListener( debug.onMessage );
-
+// Install handler for alarm events.
 chrome.alarms.onAlarm.addListener( debug.onAlarm );
-
-chrome.webRequest.onBeforeSendHeaders.addListener( debug.onBeforeSendHeaders,
-    { urls: debug.urlPatterns }, [ 'blocking', 'requestHeaders' ] );
-
+// Install handler for response headers from our configured domains.
 chrome.webRequest.onHeadersReceived.addListener( debug.onHeadersReceived,
     { urls: debug.urlPatterns }, [ 'responseHeaders' ] );
-
+// Update extension icon state.
 debug.updateIcon();

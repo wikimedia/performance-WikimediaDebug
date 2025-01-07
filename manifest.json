@@ -1,25 +1,34 @@
 {
-    "manifest_version": 2,
+    "manifest_version": 3,
     "name": "WikimediaDebug",
     "description": "Control the X-Wikimedia-Debug header on HTTP requests.",
     "author": "Ori Livneh",
-    "version": "2.9.0",
+    "version": "3.0.0",
     "icons": {
         "512": "images/logo.png"
     },
-    "browser_action": {
+    "action": {
         "default_icon": "images/icon-lightmode-128.png",
         "default_title": "WikimediaDebug",
-        "default_popup": "popup.html"
+        "default_popup": "popup.html",
+        "theme_icons": [ {
+            "dark": "images/icon-lightmode-128.png",
+            "light": "images/icon-darkmode-128.png",
+            "size": 128
+        } ]
     },
     "background": {
-        "scripts": [ "background.js" ]
+        "service_worker": "service-worker.js",
+        "scripts": [ "service-worker.js" ]
     },
     "permissions": [
         "alarms",
+        "storage",
         "tabs",
         "webRequest",
-        "webRequestBlocking",
+        "declarativeNetRequest"
+    ],
+    "host_permissions": [
         "*://*.mediawiki.org/*",
         "*://*.wikidata.org/*",
         "*://*.wikifunctions.org/*",
@@ -36,10 +45,10 @@
         "*://*.tools.wmflabs.org/*",
         "*://*.tools-static.wmflabs.org/*"
     ],
-    "applications": {
+    "browser_specific_settings": {
         "gecko": {
             "id": "wikimediadebug@wikimedia.org",
-            "strict_min_version": "79.0"
+            "strict_min_version": "115.0"
         }
     }
 }
