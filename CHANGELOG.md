@@ -1,18 +1,24 @@
+## 3.0.0
+
+### Added
+
+* Converted to WebExtensions Manifest v3 (Bryan Davis). ([T312694](https://phabricator.wikimedia.org/T312694))
+
 ## 2.9.0
 
-## Added
+### Added
 
 * Allow wikitech.wikimedia.org ([T371537](https://phabricator.wikimedia.org/T371537))
 
 ## 2.8.0
 
-## Added
+### Added
 
 * Add wikifunctions.org (James Forrester). ([T275945](https://phabricator.wikimedia.org/T275945))
 
 ## 2.7.1
 
-## Fixed
+### Fixed
 
 * Fix dark mode version of the new output links area.
 
@@ -23,7 +29,7 @@
 * Add "Excimer UI" option (Timo Tijhof) ([T291015](https://phabricator.wikimedia.org/T291015))
 * Create new "output" area with last five xhgui/excimer/logstash links (Timo Tijhof)
 
-## Fixed
+### Fixed
 
 * Fix unwanted animation in Chrome when popup opens ([T331249](https://phabricator.wikimedia.org/T331249))
 * Improve "Unsupported" warning to render above form controls
