@@ -1,3 +1,12 @@
+## 3.0.1
+
+### Fixed
+
+* Update Firefox add-on label in README.md (Bryan Davis).
+* Remove installation warning about granting _Block content on any page_
+  permission to the extension. We already have host specific permissions
+  (Antoine Musso). ([T387822](https://phabricator.wikimedia.org/T387822)
+
 ## 3.0.0
 
 ### Added
