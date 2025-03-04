@@ -26,7 +26,7 @@
         "storage",
         "tabs",
         "webRequest",
-        "declarativeNetRequest"
+        "declarativeNetRequestWithHostAccess"
     ],
     "host_permissions": [
         "*://*.mediawiki.org/*",
