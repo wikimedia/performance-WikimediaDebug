@@ -71,7 +71,7 @@ See <https://developer.chrome.com/webstore/publish>.
 
 * Log in at <https://addons.mozilla.org/>.
 * Open "[Manage My Submissions](https://addons.mozilla.org/en-US/developers/addons)" from the Tool menu.
-* Select "Wikimedia Debug Header".
+* Select "Wikimedia Debug".
 * Click "Upload New Version".
 * Click "Select a file..." and select the ZIP archive, then continue.
 * When asked for release notes, use the same bullet list as used for [CHANGELOG.md](./CHANGELOG.md).
