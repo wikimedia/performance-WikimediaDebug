@@ -18,6 +18,12 @@
 'use strict';
 /* global chrome */
 
+function debugLog( msg, ...args ) {
+    console.info( '[WikimediaDebug/service-worker.js] ' + msg, ...args );
+}
+
+debugLog( 'Created new service-worker.js background process' );
+
 // The last ten entries to display in the "output" list
 const outputList = [];
 let outputOffset = 0;
@@ -52,6 +58,7 @@ async function fetchBackends( realm ) {
     }
 
     return memGetWithSet( `backends-${ realm }`, TTL_HOUR, async () => {
+        debugLog( 'Downloading fresh debug.json from NOC' );
         const resp = await fetch( 'https://noc.wikimedia.org/conf/debug.json' );
         const data = await resp.json();
         return data.backends;
@@ -237,9 +244,9 @@ const debug = {
                     addRules: newRules,
                 } );
                 const activeRules = await DNR.getSessionRules();
-                console.log( 'Installed rules', activeRules );
+                debugLog( 'Installed rules', activeRules );
             } catch ( e ) {
-                console.log( 'Failed to update rules', e );
+                console.error( 'Failed to update rules', e );
             }
         } )();
     },
@@ -351,6 +358,7 @@ const debug = {
                 const currentTab = await getCurrentTab();
                 const realm = debug.getRealm( currentTab && currentTab.url );
                 const backends = await fetchBackends( realm );
+                debugLog( 'Sending get-state response', debug.state );
                 sendResponse( {
                     realm,
                     backends,

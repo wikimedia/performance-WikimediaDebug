@@ -16,11 +16,16 @@
 'use strict';
 /* global chrome */
 
+function debugLog( msg, ...args ) {
+    console.info( '[WikimediaDebug/popup.js] ' + msg, ...args );
+}
+
 const pendingState = new Promise(
     ( resolve ) => {
         chrome.runtime.sendMessage(
             { action: 'get-state' },
             ( response ) => {
+                debugLog( 'Received get-state response', response.state );
                 resolve( response );
             }
         );
@@ -115,6 +120,7 @@ function onMessage( response ) {
             message.state[ el.id ] = newValue;
         } );
 
+        debugLog( 'Sending set-state request', message.state );
         chrome.runtime.sendMessage( message );
     }
 
