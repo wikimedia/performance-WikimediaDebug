@@ -154,7 +154,7 @@ const debug = {
     /**
      * Toggle enabled state.
      *
-     * @param {bool} value
+     * @param {boolean} value
      */
     setEnabled: function ( value ) {
         debug.state.enabled = value;
@@ -258,7 +258,7 @@ const debug = {
      *
      * https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/webRequest/onHeadersReceived
      *
-     * @param {object} resp
+     * @param {Object} resp
      */
     onHeadersReceived: function ( resp ) {
         if ( debug.state.enabled ) {
@@ -315,7 +315,7 @@ const debug = {
     /**
      * Disable automatically when an 'autoOff' alarm is received.
      *
-     * @param {object} alarm
+     * @param {Object} alarm
      */
     onAlarm: function ( alarm ) {
         if ( alarm.name === 'autoOff' ) {
