@@ -162,9 +162,9 @@ function onMessage( response ) {
                 el.addEventListener( 'keypress', onSwitcherKeypress );
             }
 
-            el.addEventListener( 'change', onUpdate );
         }
 
+        el.addEventListener( 'change', onUpdate );
     } );
 
     renderOutputList( response.outputList );

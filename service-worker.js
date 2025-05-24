@@ -336,13 +336,13 @@ const debug = {
     onMessage: function ( request, sender, sendResponse ) {
         if ( request.action === 'set-state' ) {
             const state = request.state;
-            debug.setEnabled( state.enabled );
             debug.state.backend = state.backend;
             debug.state.excimer = state.excimer;
             debug.state.profile = state.profile;
             debug.state.forceprofile = state.forceprofile;
             debug.state.readonly = state.readonly;
             debug.state.log = state.log;
+            debug.setEnabled( state.enabled );
             return;
         }
 
