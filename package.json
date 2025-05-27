@@ -1,4 +1,5 @@
 {
+    "name": "WikimediaDebug",
     "private": true,
     "scripts": {
         "test": "eslint .",
