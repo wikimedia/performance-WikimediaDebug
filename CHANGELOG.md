@@ -1,3 +1,15 @@
+## 3.1.0
+
+### Fixed
+
+* Fix forgetful "backend" dropdown (Timo Tijhof).
+  ([T395190](https://phabricator.wikimedia.org/T395190))
+
+### Added
+
+* Debug instrumentation (Timo Tijhof).
+  ([T315111](https://phabricator.wikimedia.org/T315111))
+
 ## 3.0.1
 
 ### Fixed
