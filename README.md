@@ -57,8 +57,11 @@ You can install [WikimediaDebug for Firefox](https://addons.mozilla.org/en-US/fi
   ```
   git archive -v --format zip -9 -o /tmp/WikimediaDebug.zip HEAD
   ```
+### Publishing
 
-### Upload to the Chrome Web Store
+See <https://wikitech.wikimedia.org/wiki/Release_Engineering/Runbook/WikimediaDebug>.
+
+#### Upload to the Chrome Web Store
 
 See <https://developer.chrome.com/webstore/publish>.
 
@@ -67,7 +70,7 @@ See <https://developer.chrome.com/webstore/publish>.
 * Once back on the Edit page, click "Submit for review" at the top.
 * Done!
 
-### Upload to Firefox Add-ons
+#### Upload to Firefox Add-ons
 
 * Log in at <https://addons.mozilla.org/>.
 * Open "[Manage My Submissions](https://addons.mozilla.org/en-US/developers/addons)" from the Tool menu.
