@@ -41,9 +41,7 @@
         "*://*.wikiversity.org/*",
         "*://*.wikivoyage.org/*",
         "*://*.wiktionary.org/*",
-        "*://*.beta.wmflabs.org/*",
-        "*://*.tools.wmflabs.org/*",
-        "*://*.tools-static.wmflabs.org/*"
+        "*://*.beta.wmflabs.org/*"
     ],
     "browser_specific_settings": {
         "gecko": {
