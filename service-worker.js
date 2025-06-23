@@ -113,9 +113,13 @@ const debug = {
         const currentHostname = url && new URL( url ).hostname || '';
 
         for ( const urlPattern of debug.urlPatterns ) {
+            // "*://*.example.org/*"[6:-2] > "example.org"
             const allowedHostname = urlPattern.slice( 6, -2 );
             if ( currentHostname.endsWith( allowedHostname ) ) {
-                return /beta\.wmflabs\.org$/.test( currentHostname ) ? 'beta' : 'production';
+                return (
+                    currentHostname.endsWith( '.beta.wmcloud.org' )
+                    || currentHostname.endsWith( '.beta.wmflabs.org' )
+                ) ? 'beta' : 'production';
             }
         }
         return 'other';

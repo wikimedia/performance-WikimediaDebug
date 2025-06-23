@@ -41,6 +41,7 @@
         "*://*.wikiversity.org/*",
         "*://*.wikivoyage.org/*",
         "*://*.wiktionary.org/*",
+        "*://*.beta.wmcloud.org/*",
         "*://*.beta.wmflabs.org/*"
     ],
     "browser_specific_settings": {
