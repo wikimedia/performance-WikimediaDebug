@@ -285,13 +285,13 @@ const debug = {
                 links.push( {
                     label: 'Find in XHGui',
                     href: isBeta
-                        ? 'https://performance.wikimedia.beta.wmflabs.org/xhgui/?url=' + reqId
+                        ? 'https://performance.wikimedia.beta.wmcloud.org/xhgui/?url=' + reqId
                         : 'https://performance.wikimedia.org/xhgui/?url=' + reqId
                 } );
             }
             if ( debug.state.log && reqId ) {
                 const logstashDash = isBeta
-                    ? 'https://logstash-beta.wmflabs.org/app/dashboards#/view/x-debug'
+                    ? 'https://beta-logs.wmcloud.org/app/dashboards#/view/x-debug'
                     : 'https://logstash.wikimedia.org/app/dashboards#/view/x-debug';
                 links.push( {
                     label: 'Find in Logstash',
