@@ -38,6 +38,7 @@ You can install [WikimediaDebug for Firefox](https://addons.mozilla.org/en-US/fi
   of `origin/master` (per the above), update the version in `manifest.json` ([example](https://gerrit.wikimedia.org/g/performance/WikimediaDebug/+/a2c6cb5b3c89258224bfa906291104e7c5bf77a8))
   and create a commit for this release.
 * Add a bullet list of noteworthy changes to `CHANGELOG.md`.
+  Use `npm run changelog` as your starting point.
 * Push the commit for review and merge it, then pull it down, then create a signed tag and push it.
 
   ```
