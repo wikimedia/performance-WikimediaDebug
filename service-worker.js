@@ -54,6 +54,7 @@ async function memGetWithSet( key, ttl, callback ) {
 async function fetchBackends( realm ) {
     if ( realm !== 'production' ) {
         // Avoid showing prod hostnames in beta and on other sites.
+        // eslint-disable-next-line unicorn/no-useless-promise-resolve-reject
         return Promise.resolve( [ '1' ] );
     }
 
