@@ -1,12 +1,12 @@
 {
-    "name": "WikimediaDebug",
-    "private": true,
-    "scripts": {
-        "test": "eslint .",
-        "fix": "eslint --fix .",
-        "changelog": "git log --format='* %s. (%aN)' --no-merges --reverse $(git describe --tags --abbrev=0 HEAD)...HEAD | sort | grep -vE '^\\* (build|docs?|tests?):'"
-    },
-    "devDependencies": {
-        "eslint-config-wikimedia": "0.31.0"
-    }
+	"name": "WikimediaDebug",
+	"private": true,
+	"scripts": {
+		"test": "eslint .",
+		"fix": "eslint --fix .",
+		"changelog": "git log --format='* %s. (%aN)' --no-merges --reverse $(git describe --tags --abbrev=0 HEAD)...HEAD | sort | grep -vE '^\\* (build|docs?|tests?):'"
+	},
+	"devDependencies": {
+		"eslint-config-wikimedia": "0.31.0"
+	}
 }
