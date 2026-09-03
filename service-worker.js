@@ -268,12 +268,36 @@ const debug = {
 	onHeadersReceived: function ( resp ) {
 		if ( debug.state.enabled ) {
 			const isMain = resp.type === 'main_frame';
-			const reqId = resp.responseHeaders
-				.find( ( responseHeader ) => responseHeader.name === 'x-request-id' )
-				?.value;
 			const excimerLink = resp.responseHeaders
 				.find( ( responseHeader ) => responseHeader.name === 'excimer-ui-link' )
 				?.value;
+			const mwServer = resp.responseHeaders
+				.find( ( responseHeader ) => responseHeader.name === 'server' )
+				?.value || '';
+			const phpVersion = resp.responseHeaders
+				.find( ( responseHeader ) => responseHeader.name === 'x-powered-by' )
+				?.value;
+			let reqId = resp.responseHeaders
+				.find( ( responseHeader ) => responseHeader.name === 'x-request-id' )
+				?.value;
+			if ( resp.fromCache || !phpVersion || !mwServer.includes( 'mw' ) ) {
+				// As of 2025, Varnish/ATS also exposes x-request-id on CDN cache hits.
+				// Ignore noise from browser-cache hits. While declarativeNetRequest only applies
+				// to network requests, onHeadersReceived also applies to browser cache hits,
+				// which are of no use to us here.
+				// It is important that we do not ignore HTTP 304 responses, which are real
+				// network responses and should be debuggable. While these reuse part of the
+				// browser cache, they are (fortunately for us) not considered "from cache".
+				//
+				// Ignore noise from non-MediaWiki requests.
+				// As of 2025 Varnish/ATS also exposes x-request-id for non-MediaWiki requests such
+				// as logstash.wikimedia.org and performance.wikimedia.org, which we link to here.
+				// This meant as soon as you click a result, all results are washed away by a
+				// flood of inactionable requests to those domains.
+				// Likewise, integration.wikimedia.org and and phabricator.wikimedia.org are
+				// commonly open in the background and produce noise.
+				reqId = null;
+			}
 			const isBeta = debug.getRealm( resp.url ) === 'beta';
 			const links = [];
 			if ( debug.state.excimer && excimerLink ) {
