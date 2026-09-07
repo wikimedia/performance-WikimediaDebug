@@ -1,3 +1,9 @@
+## 3.3.0
+
+### Fixed
+
+* Fix inclusion of non-MediaWiki request noise in the list. (Timo Tijhof)
+
 ## 3.2.0
 
 ### Fixed
