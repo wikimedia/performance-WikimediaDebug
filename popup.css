@@ -165,6 +165,120 @@ a {
 }
 
 /**
+ * Test Kitchen experiments
+ */
+
+.experiments {
+	margin-top: 12px;
+	padding-top: 8px;
+	border-top: 1px solid var(--xwd-separator-border);
+}
+.experiments-heading {
+	margin: 0 0 4px 0;
+	font-size: 12px;
+	font-weight: bold;
+	color: var(--xwd-body-text--strong);
+}
+.experiments-note {
+	margin: 0 0 8px 0;
+	font-size: 11px;
+	color: var(--xwd-body-text);
+}
+.experiments-list {
+	display: flex;
+	flex-flow: column nowrap;
+	gap: 6px;
+}
+.experiment-row {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 6px;
+	font-size: 12px;
+}
+.experiment-row-error {
+	flex: 1 0 100%;
+	font-size: 11px;
+	color: var(--wmui-color-red50);
+}
+.experiment-row-error:empty {
+	display: none;
+}
+.experiment-input,
+.experiment-group-input {
+	flex: 1 1 0;
+	min-width: 0;
+	font: inherit;
+	padding: 2px 4px;
+	box-sizing: border-box;
+}
+.experiment-input.invalid,
+.experiment-group-input.invalid {
+	border-color: var(--wmui-color-red50);
+	outline: 1px solid var(--wmui-color-red50);
+}
+.experiment-remove {
+	flex: 0 0 auto;
+	padding: 2px 4px;
+	border: 0;
+	background: transparent;
+	color: var(--xwd-body-text);
+	font-size: 14px;
+	line-height: 1;
+	cursor: pointer;
+}
+.experiment-remove:hover {
+	color: var(--wmui-color-red50);
+}
+.experiments-actions {
+	margin-top: 6px;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px;
+}
+.experiments-actions button {
+	padding: 0;
+	border: 0;
+	background: transparent;
+	font: inherit;
+	font-size: 12px;
+	color: var(--xwd-link-text);
+	cursor: pointer;
+}
+.experiments-import {
+	margin-top: 6px;
+}
+.experiments-import-input {
+	width: 100%;
+	box-sizing: border-box;
+	font-family: monospace;
+	font-size: 11px;
+	resize: vertical;
+}
+.experiments-import-buttons {
+	margin-top: 4px;
+	display: flex;
+	gap: 12px;
+}
+.experiments-import-buttons button {
+	padding: 0;
+	border: 0;
+	background: transparent;
+	font: inherit;
+	font-size: 12px;
+	color: var(--xwd-link-text);
+	cursor: pointer;
+}
+.experiments-status {
+	margin: 6px 0 0 0;
+	font-size: 11px;
+	color: var(--xwd-body-text);
+}
+.experiments-status:empty {
+	display: none;
+}
+
+/**
  * Checkbox options
  */
 

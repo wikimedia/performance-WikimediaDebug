@@ -19,7 +19,7 @@
 	},
 	"background": {
 		"service_worker": "service-worker.js",
-		"scripts": [ "service-worker.js" ]
+		"scripts": [ "experiments.js", "service-worker.js" ]
 	},
 	"permissions": [
 		"alarms",

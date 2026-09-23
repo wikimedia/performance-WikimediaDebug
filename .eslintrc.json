@@ -11,5 +11,13 @@
 	},
 	"env": {
 		"browser": true
-	}
+	},
+	"overrides": [
+		{
+			"files": [ "tests/**/*.js" ],
+			"env": {
+				"node": true
+			}
+		}
+	]
 }

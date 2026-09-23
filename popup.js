@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 'use strict';
-/* global chrome */
+/* global chrome, WikimediaDebugExperiments */
 
 function debugLog( msg, ...args ) {
 	console.info( '[WikimediaDebug/popup.js] ' + msg, ...args );
@@ -105,6 +105,10 @@ function onMessage( response ) {
 
 	const optionElements = [].slice.call( document.querySelectorAll( '.option' ) );
 
+	// Active experiment name -> its groups, used for autocomplete suggestions.
+	let groupsByExperiment = {};
+	let rowIdCounter = 0;
+
 	function onUpdate() {
 		const message = { action: 'set-state', state: {} };
 
@@ -120,8 +124,182 @@ function onMessage( response ) {
 			message.state[ el.id ] = newValue;
 		} );
 
+		message.state.experiments = collectExperiments();
+
 		debugLog( 'Sending set-state request', message.state );
 		chrome.runtime.sendMessage( message );
+	}
+
+	/**
+	 * Only completed, well-formed pairs are collected. An experiment may appear
+	 * once: the first row owns it, later rows with the same name are ignored.
+	 *
+	 * @return {Object<string,string>} Experiment name to group.
+	 */
+	function collectExperiments() {
+		const assignments = {};
+		const seen = new Set();
+		document.querySelectorAll( '.experiment-row' ).forEach( ( row ) => {
+			const name = row.querySelector( '.experiment-input' ).value;
+			const group = row.querySelector( '.experiment-group-input' ).value;
+			if ( name === '' || seen.has( name ) ) {
+				return;
+			}
+			seen.add( name );
+			if ( WikimediaDebugExperiments.isValidExperimentName( name )
+				&& WikimediaDebugExperiments.isValidGroupName( group )
+			) {
+				assignments[ name ] = group;
+			}
+		} );
+		return assignments;
+	}
+
+	// Re-validate every row: duplicate experiment names are relational, so a
+	// change in one row can change another's validity.
+	function validateAllRows() {
+		const seen = new Set();
+		document.querySelectorAll( '.experiment-row' ).forEach( ( row ) => {
+			validateRow( row, seen );
+		} );
+	}
+
+	// Flag a field that doesn't match the header grammar, or an experiment name
+	// already used by an earlier row. Empty fields are incomplete, not invalid.
+	function validateRow( row, seen ) {
+		const expInput = row.querySelector( '.experiment-input' );
+		const groupInput = row.querySelector( '.experiment-group-input' );
+		const name = expInput.value;
+		const badName = name !== '' && !WikimediaDebugExperiments.isValidExperimentName( name );
+		const duplicate = name !== '' && seen.has( name );
+		expInput.classList.toggle( 'invalid', badName || duplicate );
+		groupInput.classList.toggle( 'invalid',
+			groupInput.value !== '' && !WikimediaDebugExperiments.isValidGroupName( groupInput.value ) );
+		row.querySelector( '.experiment-row-error' ).textContent = duplicate
+			? 'Already overridden above; this row won\'t be included'
+			: '';
+		if ( name !== '' ) {
+			seen.add( name );
+		}
+	}
+
+	// Suggest the typed experiment's groups; empty for a custom experiment.
+	function updateGroupSuggestions( row ) {
+		const expInput = row.querySelector( '.experiment-input' );
+		const groupList = row.querySelector( 'datalist' );
+		groupList.innerHTML = '';
+		( groupsByExperiment[ expInput.value ] || [] ).forEach( ( group ) => {
+			groupList.appendChild( dom( 'option', { value: group } ) );
+		} );
+	}
+
+	function addExperimentRow( name = '', group = '' ) {
+		const groupListId = 'experiment-groups-' + ( rowIdCounter++ );
+
+		const expInput = dom( 'input', {
+			type: 'text', className: 'experiment-input', placeholder: 'experiment', value: name
+		} );
+		expInput.setAttribute( 'list', 'experiment-names' );
+
+		const groupInput = dom( 'input', {
+			type: 'text', className: 'experiment-group-input', placeholder: 'group', value: group
+		} );
+		groupInput.setAttribute( 'list', groupListId );
+
+		const groupList = dom( 'datalist', { id: groupListId } );
+		const removeButton = dom( 'button', {
+			type: 'button', className: 'experiment-remove', title: 'Remove'
+		}, '✕' );
+		const errorEl = dom( 'span', { className: 'experiment-row-error' } );
+
+		const row = dom( 'div', { className: 'experiment-row' },
+			expInput, groupInput, groupList, removeButton, errorEl );
+
+		expInput.addEventListener( 'input', () => {
+			validateAllRows();
+			updateGroupSuggestions( row );
+		} );
+		groupInput.addEventListener( 'input', () => validateAllRows() );
+		expInput.addEventListener( 'change', onUpdate );
+		groupInput.addEventListener( 'change', onUpdate );
+		removeButton.addEventListener( 'click', () => {
+			row.remove();
+			validateAllRows();
+			onUpdate();
+		} );
+
+		document.querySelector( '.experiments-list' ).append( row );
+		updateGroupSuggestions( row );
+	}
+
+	// Load active experiments as autocomplete suggestions.
+	function populateExperimentSuggestions( experiments ) {
+		const nameList = document.querySelector( '#experiment-names' );
+		groupsByExperiment = {};
+		nameList.innerHTML = '';
+		( experiments || [] ).forEach( ( experiment ) => {
+			groupsByExperiment[ experiment.name ] = experiment.groups;
+			nameList.appendChild( dom( 'option', { value: experiment.name } ) );
+		} );
+	}
+
+	// Replace the rows with one per saved pair, or a single empty row.
+	function renderExperimentRows( selected ) {
+		document.querySelector( '.experiments-list' ).innerHTML = '';
+		const names = Object.keys( selected || {} );
+		if ( names.length ) {
+			names.forEach( ( name ) => addExperimentRow( name, selected[ name ] ) );
+		} else {
+			addExperimentRow();
+		}
+		validateAllRows();
+	}
+
+	function showExperimentStatus( message ) {
+		document.querySelector( '.experiments-status' ).textContent = message;
+	}
+
+	function exportExperiments() {
+		const json = WikimediaDebugExperiments.serializeExperiments( collectExperiments() );
+		navigator.clipboard.writeText( json ).then(
+			() => showExperimentStatus( 'Copied to clipboard' ),
+			() => showExperimentStatus( 'Copy failed' )
+		);
+	}
+
+	function applyImport() {
+		const input = document.querySelector( '.experiments-import-input' );
+		const result = WikimediaDebugExperiments.parseExperiments( input.value );
+		if ( !result.ok ) {
+			showExperimentStatus( result.error );
+			return;
+		}
+		// Import replaces the current rows.
+		renderExperimentRows( result.valid );
+		onUpdate();
+		document.querySelector( '.experiments-import' ).hidden = true;
+		input.value = '';
+		const imported = Object.keys( result.valid ).length;
+		showExperimentStatus( result.skipped.length
+			? `Imported ${ imported }, skipped ${ result.skipped.length } invalid`
+			: `Imported ${ imported }` );
+	}
+
+	function wireExperimentControls() {
+		const section = document.querySelector( '.experiments' );
+		const importPanel = section.querySelector( '.experiments-import' );
+		section.querySelector( '.experiments-add' ).addEventListener( 'click', () => addExperimentRow() );
+		section.querySelector( '.experiments-export' ).addEventListener( 'click', exportExperiments );
+		section.querySelector( '.experiments-import-toggle' ).addEventListener( 'click', () => {
+			importPanel.hidden = !importPanel.hidden;
+		} );
+		section.querySelector( '.experiments-import-apply' ).addEventListener( 'click', applyImport );
+		section.querySelector( '.experiments-import-cancel' ).addEventListener( 'click', () => {
+			importPanel.hidden = true;
+			section.querySelector( '.experiments-import-input' ).value = '';
+			showExperimentStatus( '' );
+		} );
+		section.hidden = false;
 	}
 
 	function onSwitcherClick() {
@@ -151,6 +329,10 @@ function onMessage( response ) {
 			backendElement.appendChild( item );
 		} );
 	}
+
+	populateExperimentSuggestions( response.experiments );
+	renderExperimentRows( response.state.experiments );
+	wireExperimentControls();
 
 	optionElements.forEach( ( el ) => {
 		const value = response.state[ el.id ];

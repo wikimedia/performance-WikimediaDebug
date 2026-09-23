@@ -26,7 +26,27 @@
 				<label class="ui-checkbox"><input class="option" type="checkbox" id="readonly"><span></span>Read-only DB</label>
 			</div>
 		</div>
+		<section class="experiments" hidden>
+			<h2 class="experiments-heading">Test Kitchen experiment overrides</h2>
+			<p class="experiments-note">Forces enrollment; these are recorded as overridden and excluded from analytics.</p>
+			<div class="experiments-list"></div>
+			<div class="experiments-actions">
+				<button type="button" class="experiments-add">+ Add experiment</button>
+				<button type="button" class="experiments-export">Export JSON</button>
+				<button type="button" class="experiments-import-toggle">Import JSON</button>
+			</div>
+			<div class="experiments-import" hidden>
+				<textarea class="experiments-import-input" rows="4" placeholder='{ "experiment-name": "group" }'></textarea>
+				<div class="experiments-import-buttons">
+					<button type="button" class="experiments-import-apply">Apply</button>
+					<button type="button" class="experiments-import-cancel">Cancel</button>
+				</div>
+			</div>
+			<p class="experiments-status" role="status" aria-live="polite"></p>
+			<datalist id="experiment-names"></datalist>
+		</section>
 		<ol class="output"></ol>
+		<script src="experiments.js"></script>
 		<script src="popup.js"></script>
 	</body>
 </html>

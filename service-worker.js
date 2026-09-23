@@ -16,7 +16,12 @@
  * limitations under the License.
  */
 'use strict';
-/* global chrome */
+/* global chrome, importScripts, WikimediaDebugExperiments */
+
+// Chrome loads experiments.js here; Firefox loads it via manifest scripts.
+if ( typeof importScripts === 'function' ) {
+	importScripts( 'experiments.js' );
+}
 
 function debugLog( msg, ...args ) {
 	console.info( '[WikimediaDebug/service-worker.js] ' + msg, ...args );
@@ -30,6 +35,8 @@ let outputOffset = 0;
 const OUTPUT_MAXLENGTH = 100;
 
 const TTL_HOUR = 3600 * 1000;
+const TTL_EXPERIMENTS = 10 * 60 * 1000;
+
 async function memGetWithSet( key, ttl, callback ) {
 	const now = Date.now();
 	let entry = ( await chrome.storage.local.get( [ key ] ) )[ key ];
@@ -67,6 +74,32 @@ async function fetchBackends( realm ) {
 
 }
 
+/**
+ * Active Test Kitchen experiments the user may override, each as
+ * `{ name, groups }`. Available on every realm; unlike backends, experiment
+ * overrides also apply on the Beta Cluster.
+ *
+ * @return {Promise<Array>}
+ */
+async function fetchExperiments() {
+	let experiments;
+	try {
+		experiments = await memGetWithSet( 'experiments', TTL_EXPERIMENTS, async () => {
+			debugLog( 'Downloading fresh experiments from Test Kitchen' );
+			const resp = await fetch( 'https://test-kitchen.wikimedia.org/api/v1/experiments' );
+			return resp.json();
+		} );
+	} catch ( e ) {
+		// Degrade to no experiments rather than breaking the rest of the popup.
+		console.error( 'Failed to fetch experiments', e );
+		return [];
+	}
+
+	// The API returns active and upcoming experiments; even with the short
+	// cache TTL, re-check at read time to drop one that ended while cached.
+	return WikimediaDebugExperiments.getActiveExperiments( experiments, Date.now() );
+}
+
 function getCurrentTab() {
 	return new Promise( ( resolve ) => {
 		chrome.tabs.query(
@@ -88,6 +121,12 @@ const debug = {
 	getHeaderDirectives: function () {
 		const attributes = [ 'backend=' + debug.state.backend ];
 
+		const experiments = WikimediaDebugExperiments.buildExperimentsDirective(
+			debug.state.experiments
+		);
+		if ( experiments ) {
+			attributes.push( 'experiments=' + experiments );
+		}
 		if ( debug.state.excimer ) {
 			attributes.push( 'excimer' );
 		}
@@ -154,6 +193,11 @@ const debug = {
 		// Enable verbose debug logging
 		// https://wikitech.wikimedia.org/wiki/WikimediaDebug#Debug_logging
 		log: false,
+
+		// Test Kitchen overrides: map of experiment name to enrollment group,
+		// encoded into the header's `experiments` directive.
+		// https://wikitech.wikimedia.org/wiki/WikimediaDebug#Test_Kitchen_experiment_overrides
+		experiments: {},
 	},
 
 	/**
@@ -354,6 +398,7 @@ const debug = {
 			debug.state.forceprofile = false;
 			debug.state.readonly = false;
 			debug.state.log = false;
+			debug.state.experiments = {};
 
 			debug.setEnabled( false );
 		}
@@ -378,6 +423,7 @@ const debug = {
 			debug.state.forceprofile = state.forceprofile;
 			debug.state.readonly = state.readonly;
 			debug.state.log = state.log;
+			debug.state.experiments = state.experiments || {};
 			debug.setEnabled( state.enabled );
 			return;
 		}
@@ -387,10 +433,12 @@ const debug = {
 				const currentTab = await getCurrentTab();
 				const realm = debug.getRealm( currentTab && currentTab.url );
 				const backends = await fetchBackends( realm );
+				const experiments = await fetchExperiments();
 				debugLog( 'Sending get-state response', debug.state );
 				sendResponse( {
 					realm,
 					backends,
+					experiments,
 					outputList,
 					state: debug.state
 				} );
