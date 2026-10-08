@@ -1,3 +1,9 @@
+## 3.4.0
+
+### Added
+
+* Test Kitchen experiment overrides in header and popup (Clare Ming) [T438283](https://phabricator.wikimedia.org/T438283)
+
 ## 3.3.0
 
 ### Fixed
